@@ -329,9 +329,9 @@ p { line-height: 1.7; }
 }
 
 .nav-logo-img {
-  width: 32px;
-  height: 32px;
-  border-radius: 6px;
+  width: 40px;
+  height: 40px;
+  border-radius: 8px;
   object-fit: contain;
   flex-shrink: 0;
 }
