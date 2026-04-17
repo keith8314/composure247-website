@@ -322,6 +322,17 @@ p { line-height: 1.7; }
   color: var(--white);
 }
 
+.nav[data-dark-hero]:not(.scrolled) .btn-secondary {
+  color: var(--white);
+  border-color: rgba(255, 255, 255, 0.45);
+}
+
+.nav[data-dark-hero]:not(.scrolled) .btn-secondary:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: var(--white);
+  color: var(--white);
+}
+
 .nav-logo-mark {
   width: 32px;
   height: 32px;
