@@ -86,26 +86,29 @@
     .included-card.respond .included-bar{background:linear-gradient(90deg,var(--text-muted),var(--text-subtle));}
     .included-card.communicate .included-bar{background:linear-gradient(90deg,var(--accent),var(--teal));}
     .included-card.enterprise .included-bar{background:linear-gradient(90deg,var(--success),#0E9F8E);}
-    .included-card-recommended{position:absolute;top:var(--sp-5);right:var(--sp-5);background:var(--accent);color:var(--white);padding:4px 10px;border-radius:var(--radius-full);font-size:10px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;box-shadow:var(--shadow-sm);}
+    .included-card-recommended{position:absolute;top:18px;right:18px;background:var(--accent);color:var(--white);padding:5px 11px;border-radius:var(--radius-full);font-size:10px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;box-shadow:var(--shadow-sm);z-index:1;}
     .included-card.enterprise .included-card-recommended{background:var(--success);}
-    .included-card-head{padding:var(--sp-7) var(--sp-7) var(--sp-5);}
-    .included-card-tier{display:inline-block;font-size:11px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--text-muted);background:var(--surface);padding:4px 10px;border-radius:var(--radius-full);margin-bottom:var(--sp-3);}
+    .included-card-head{display:flex;flex-direction:column;align-items:flex-start;gap:var(--sp-3);padding:var(--sp-7);}
+    .included-card-tier{display:inline-block;font-size:11px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--text-muted);background:var(--surface);padding:5px 11px;border-radius:var(--radius-full);margin:0;line-height:1;}
     .included-card.communicate .included-card-tier{color:var(--accent);background:var(--accent-glow);}
     .included-card.enterprise .included-card-tier{color:var(--success);background:var(--success-bg);}
-    .included-card-name{font-size:1.6rem;font-weight:800;color:var(--navy);letter-spacing:-0.01em;margin-bottom:6px;line-height:1.1;}
-    .included-card-price{font-size:var(--text-sm);color:var(--text-muted);font-weight:500;margin-bottom:var(--sp-3);}
-    .included-card-price strong{color:var(--navy);font-weight:700;}
-    .included-card-tagline{font-size:var(--text-sm);color:var(--text-muted);line-height:1.5;margin:0;}
-    .included-card-body{padding:var(--sp-5) var(--sp-7) var(--sp-7);border-top:1px solid var(--border-light);background:var(--surface-soft,#fafbfd);flex:1;display:flex;flex-direction:column;}
+    .included-card-name{font-size:1.75rem;font-weight:800;color:var(--navy);letter-spacing:-0.02em;margin:0;line-height:1;}
+    .included-card-price{display:flex;align-items:baseline;gap:6px;margin:0;line-height:1;}
+    .included-card-price .from{font-size:var(--text-xs);color:var(--text-muted);font-weight:600;letter-spacing:0.04em;text-transform:uppercase;}
+    .included-card-price .amount{font-size:1.6rem;font-weight:800;color:var(--navy);letter-spacing:-0.01em;}
+    .included-card-price .period{font-size:var(--text-sm);color:var(--text-muted);font-weight:500;}
+    .included-card-tagline{font-size:var(--text-sm);color:var(--text-muted);line-height:1.55;margin:0;}
+    .included-card-body{display:flex;flex-direction:column;padding:var(--sp-5) var(--sp-7) var(--sp-7);border-top:1px solid var(--border-light);background:#fafbfd;flex:1;}
     .included-card.communicate .included-card-body{background:rgba(59,127,234,0.03);}
     .included-card.enterprise .included-card-body{background:rgba(16,185,129,0.03);}
-    .included-list-label{font-size:11px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--text-subtle);margin-bottom:var(--sp-4);}
-    .included-list{display:flex;flex-direction:column;gap:var(--sp-3);flex:1;}
-    .included-list .pricing-feature{font-size:var(--text-sm);align-items:flex-start;}
-    .included-list .pricing-feature svg{margin-top:3px;flex-shrink:0;color:var(--accent);}
+    .included-list-label{font-size:11px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--text-subtle);margin:0 0 var(--sp-4);}
+    .included-list{display:flex;flex-direction:column;gap:12px;flex:1;margin:0;}
+    .included-list .pricing-feature{display:flex;align-items:flex-start;gap:10px;font-size:var(--text-sm);line-height:1.5;color:var(--navy);margin:0;}
+    .included-list .pricing-feature svg{margin-top:3px;flex-shrink:0;color:var(--accent);width:16px;height:16px;}
+    .included-card.respond .included-list .pricing-feature svg{color:var(--text-muted);}
     .included-card.enterprise .included-list .pricing-feature svg{color:var(--success);}
     .included-card-foot{margin-top:var(--sp-6);}
-    .included-card-foot .btn{width:100%;text-align:center;}
+    .included-card-foot .btn{display:block;width:100%;text-align:center;}
 
     /* Enterprise callout */
     .enterprise-callout{background:var(--navy);color:var(--white);border-radius:var(--radius-xl);padding:var(--sp-8) var(--sp-10);display:flex;align-items:center;justify-content:space-between;gap:var(--sp-6);flex-wrap:wrap;}
@@ -336,7 +339,7 @@
         <div class="included-card-head">
           <span class="included-card-tier">Entry tier</span>
           <div class="included-card-name">Respond</div>
-          <div class="included-card-price"><strong>From £149</strong> / month</div>
+          <div class="included-card-price"><span class="from">From</span><span class="amount">£149</span><span class="period">/ month</span></div>
           <p class="included-card-tagline">P0/P1 incident communications, fast — for MSPs who need to stop the silence during major events.</p>
         </div>
         <div class="included-card-body">
@@ -362,7 +365,7 @@
         <div class="included-card-head">
           <span class="included-card-tier">Full platform</span>
           <div class="included-card-name">Communicate</div>
-          <div class="included-card-price"><strong>From £299</strong> / month</div>
+          <div class="included-card-price"><span class="from">From</span><span class="amount">£299</span><span class="period">/ month</span></div>
           <p class="included-card-tagline">Every Composure feature, including white label branding — the full platform for professionalising every client interaction.</p>
         </div>
         <div class="included-card-body">
