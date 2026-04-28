@@ -59,15 +59,35 @@
     .tier-cta{display:block;width:100%;text-align:center;font-size:var(--text-xs);padding:9px 12px;}
 
     /* What's included section */
-    .included-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--sp-6);}
-    .included-card{background:var(--white);border:1px solid var(--border-light);border-radius:var(--radius-xl);padding:var(--sp-7);}
-    .included-card.communicate{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-glow);}
-    .included-card.enterprise{border-color:rgba(16,185,129,0.35);background:linear-gradient(180deg,rgba(16,185,129,0.04) 0%,var(--white) 60%);}
-    .included-card-head{margin-bottom:var(--sp-5);padding-bottom:var(--sp-4);border-bottom:1px solid var(--border-light);}
-    .included-card-tier{font-size:var(--text-xs);font-weight:700;letter-spacing:0.06em;text-transform:uppercase;color:var(--text-muted);margin-bottom:6px;}
-    .included-card-name{font-size:var(--text-xl);font-weight:700;color:var(--navy);}
-    .included-list{display:flex;flex-direction:column;gap:var(--sp-3);}
-    .included-list .pricing-feature{font-size:var(--text-sm);}
+    .included-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--sp-6);align-items:stretch;}
+    .included-card{display:flex;flex-direction:column;background:var(--white);border:1px solid var(--border-light);border-radius:var(--radius-xl);padding:0;overflow:hidden;position:relative;transition:var(--transition);}
+    .included-card:hover{transform:translateY(-2px);box-shadow:var(--shadow-md);}
+    .included-card.communicate{border-color:var(--accent);box-shadow:0 0 0 2px var(--accent-glow),0 8px 24px -12px rgba(59,127,234,0.25);}
+    .included-card.enterprise{border-color:rgba(16,185,129,0.35);}
+    .included-bar{height:6px;background:var(--border);}
+    .included-card.respond .included-bar{background:linear-gradient(90deg,var(--text-muted),var(--text-subtle));}
+    .included-card.communicate .included-bar{background:linear-gradient(90deg,var(--accent),var(--teal));}
+    .included-card.enterprise .included-bar{background:linear-gradient(90deg,var(--success),#0E9F8E);}
+    .included-card-recommended{position:absolute;top:var(--sp-5);right:var(--sp-5);background:var(--accent);color:var(--white);padding:4px 10px;border-radius:var(--radius-full);font-size:10px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;box-shadow:var(--shadow-sm);}
+    .included-card.enterprise .included-card-recommended{background:var(--success);}
+    .included-card-head{padding:var(--sp-7) var(--sp-7) var(--sp-5);}
+    .included-card-tier{display:inline-block;font-size:11px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--text-muted);background:var(--surface);padding:4px 10px;border-radius:var(--radius-full);margin-bottom:var(--sp-3);}
+    .included-card.communicate .included-card-tier{color:var(--accent);background:var(--accent-glow);}
+    .included-card.enterprise .included-card-tier{color:var(--success);background:var(--success-bg);}
+    .included-card-name{font-size:1.6rem;font-weight:800;color:var(--navy);letter-spacing:-0.01em;margin-bottom:6px;line-height:1.1;}
+    .included-card-price{font-size:var(--text-sm);color:var(--text-muted);font-weight:500;margin-bottom:var(--sp-3);}
+    .included-card-price strong{color:var(--navy);font-weight:700;}
+    .included-card-tagline{font-size:var(--text-sm);color:var(--text-muted);line-height:1.5;margin:0;}
+    .included-card-body{padding:var(--sp-5) var(--sp-7) var(--sp-7);border-top:1px solid var(--border-light);background:var(--surface-soft,#fafbfd);flex:1;display:flex;flex-direction:column;}
+    .included-card.communicate .included-card-body{background:rgba(59,127,234,0.03);}
+    .included-card.enterprise .included-card-body{background:rgba(16,185,129,0.03);}
+    .included-list-label{font-size:11px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--text-subtle);margin-bottom:var(--sp-4);}
+    .included-list{display:flex;flex-direction:column;gap:var(--sp-3);flex:1;}
+    .included-list .pricing-feature{font-size:var(--text-sm);align-items:flex-start;}
+    .included-list .pricing-feature svg{margin-top:3px;flex-shrink:0;color:var(--accent);}
+    .included-card.enterprise .included-list .pricing-feature svg{color:var(--success);}
+    .included-card-foot{margin-top:var(--sp-6);}
+    .included-card-foot .btn{width:100%;text-align:center;}
 
     /* Enterprise callout */
     .enterprise-callout{background:var(--navy);color:var(--white);border-radius:var(--radius-xl);padding:var(--sp-8) var(--sp-10);display:flex;align-items:center;justify-content:space-between;gap:var(--sp-6);flex-wrap:wrap;}
@@ -306,54 +326,81 @@
 
     <div class="included-grid fade-up">
       <!-- Respond -->
-      <div class="included-card">
+      <div class="included-card respond">
+        <div class="included-bar"></div>
         <div class="included-card-head">
-          <div class="included-card-tier">Tier 1 — Entry</div>
+          <span class="included-card-tier">Entry tier</span>
           <div class="included-card-name">Respond</div>
+          <div class="included-card-price"><strong>From £149</strong> / month</div>
+          <p class="included-card-tagline">P0/P1 incident communications, fast — for MSPs who need to stop the silence during major events.</p>
         </div>
-        <div class="included-list">
-          <div class="pricing-feature"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>P0/P1 incident communications</div>
-          <div class="pricing-feature"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>Multi-channel send (email + SMS)</div>
-          <div class="pricing-feature"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>Client status page</div>
-          <div class="pricing-feature"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>Post-incident report with approval workflow</div>
-          <div class="pricing-feature"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>iPhone app — push notifications, approvals, update submissions</div>
-          <div class="pricing-feature"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>14-day free trial</div>
+        <div class="included-card-body">
+          <div class="included-list-label">What you get</div>
+          <div class="included-list">
+            <div class="pricing-feature"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>P0/P1 incident communications</div>
+            <div class="pricing-feature"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>Multi-channel send (email + SMS)</div>
+            <div class="pricing-feature"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>Client status page</div>
+            <div class="pricing-feature"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>Post-incident report with approval workflow</div>
+            <div class="pricing-feature"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>iPhone app — push, approvals, update submissions</div>
+            <div class="pricing-feature"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>14-day free trial</div>
+          </div>
+          <div class="included-card-foot">
+            <a href="contact.html#trial" class="btn btn-secondary">Start free trial</a>
+          </div>
         </div>
       </div>
 
       <!-- Communicate -->
       <div class="included-card communicate">
+        <div class="included-bar"></div>
+        <div class="included-card-recommended">Recommended</div>
         <div class="included-card-head">
-          <div class="included-card-tier" style="color:var(--accent);">Tier 2 — Full platform <span style="background:var(--accent-glow);color:var(--accent);padding:2px 8px;border-radius:var(--radius-full);font-size:10px;margin-left:4px;">Recommended</span></div>
+          <span class="included-card-tier">Full platform</span>
           <div class="included-card-name">Communicate</div>
+          <div class="included-card-price"><strong>From £299</strong> / month</div>
+          <p class="included-card-tagline">Every Composure feature, including white label branding — the full platform for professionalising every client interaction.</p>
         </div>
-        <div class="included-list">
-          <div class="pricing-feature"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg><span><strong>Everything in Respond</strong></span></div>
-          <div class="pricing-feature"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>General communications module</div>
-          <div class="pricing-feature"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>Templates library</div>
-          <div class="pricing-feature"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>AM/CSM auto-inclusion on all communications</div>
-          <div class="pricing-feature"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg><strong>White label branding</strong> — badge as your own</div>
-          <div class="pricing-feature"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>Advanced analytics</div>
-          <div class="pricing-feature"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>Priority support</div>
+        <div class="included-card-body">
+          <div class="included-list-label">Everything in Respond, plus</div>
+          <div class="included-list">
+            <div class="pricing-feature"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>General communications module</div>
+            <div class="pricing-feature"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>Templates library with personalisation</div>
+            <div class="pricing-feature"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>AM/CSM auto-inclusion on all comms</div>
+            <div class="pricing-feature"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg><strong>White label branding</strong> — badge as your own</div>
+            <div class="pricing-feature"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>Advanced analytics &amp; reporting</div>
+            <div class="pricing-feature"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>Priority support</div>
+          </div>
+          <div class="included-card-foot">
+            <a href="contact.html#trial" class="btn btn-primary">Start free trial</a>
+          </div>
         </div>
       </div>
 
       <!-- Enterprise -->
       <div class="included-card enterprise">
+        <div class="included-bar"></div>
+        <div class="included-card-recommended">Bespoke</div>
         <div class="included-card-head">
-          <div class="included-card-tier" style="color:var(--success);">Tier 3 — Bespoke</div>
+          <span class="included-card-tier">For 500+ clients</span>
           <div class="included-card-name">Enterprise</div>
+          <div class="included-card-price"><strong>From £1,500</strong> / month</div>
+          <p class="included-card-tagline">Custom contract built around your operation — SLAs, SSO, dedicated CSM, and multi-entity support.</p>
         </div>
-        <div class="included-list">
-          <div class="pricing-feature"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg><span><strong>Everything in Communicate</strong></span></div>
-          <div class="pricing-feature"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>Dedicated Customer Success Manager</div>
-          <div class="pricing-feature"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>Contracted SLA on platform uptime</div>
-          <div class="pricing-feature"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>SSO / SAML integration</div>
-          <div class="pricing-feature"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>Custom onboarding and playbook configuration</div>
-          <div class="pricing-feature"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>Quarterly Business Reviews</div>
-          <div class="pricing-feature"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>API access</div>
-          <div class="pricing-feature"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>Multi-entity / group MSP support</div>
-          <div class="pricing-feature"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>Bespoke contract terms</div>
+        <div class="included-card-body">
+          <div class="included-list-label">Everything in Communicate, plus</div>
+          <div class="included-list">
+            <div class="pricing-feature"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>Dedicated Customer Success Manager</div>
+            <div class="pricing-feature"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>Contracted SLA on platform uptime</div>
+            <div class="pricing-feature"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>SSO / SAML integration</div>
+            <div class="pricing-feature"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>Custom onboarding &amp; playbook configuration</div>
+            <div class="pricing-feature"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>API access</div>
+            <div class="pricing-feature"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>Quarterly Business Reviews</div>
+            <div class="pricing-feature"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>Multi-entity / group MSP support</div>
+            <div class="pricing-feature"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>Bespoke contract terms</div>
+          </div>
+          <div class="included-card-foot">
+            <a href="contact.html" class="btn" style="background:var(--success);color:var(--white);width:100%;text-align:center;">Book a call →</a>
+          </div>
         </div>
       </div>
     </div>
