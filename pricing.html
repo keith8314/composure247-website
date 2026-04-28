@@ -32,10 +32,13 @@
 
     /* Bands grid */
     .bands-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:var(--sp-4);align-items:stretch;}
-    .band-col{display:flex;flex-direction:column;background:var(--white);border:1px solid var(--border-light);border-radius:var(--radius-xl);padding:var(--sp-6);transition:var(--transition);position:relative;}
-    .band-col.highlight{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-glow);}
+    .band-col{display:flex;flex-direction:column;background:var(--white);border:1px solid var(--border-light);border-radius:var(--radius-xl);padding:var(--sp-6);transition:transform 220ms ease, box-shadow 220ms ease, border-color 220ms ease, opacity 220ms ease;position:relative;cursor:pointer;opacity:0.55;transform:scale(0.98);}
+    .band-col:hover{opacity:0.85;border-color:var(--border);}
+    .band-col.highlight{border-color:var(--accent);border-width:2px;padding:calc(var(--sp-6) - 1px);box-shadow:0 12px 32px -12px rgba(59,127,234,0.45),0 0 0 4px var(--accent-glow);opacity:1;transform:scale(1);cursor:default;}
+    .band-col.highlight::before{content:'Selected';position:absolute;top:-12px;left:50%;transform:translateX(-50%);background:var(--accent);color:var(--white);padding:4px 12px;border-radius:var(--radius-full);font-size:10px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;white-space:nowrap;box-shadow:var(--shadow-sm);}
     .band-col.enterprise{border-color:rgba(16,185,129,0.35);background:linear-gradient(180deg,rgba(16,185,129,0.04) 0%,var(--white) 60%);}
-    .band-col.enterprise.highlight{box-shadow:0 0 0 3px rgba(16,185,129,0.18);border-color:var(--success);}
+    .band-col.enterprise.highlight{border-color:var(--success);box-shadow:0 12px 32px -12px rgba(16,185,129,0.45),0 0 0 4px rgba(16,185,129,0.18);}
+    .band-col.enterprise.highlight::before{background:var(--success);}
     .band-col-head{padding-bottom:var(--sp-4);border-bottom:1px solid var(--border-light);margin-bottom:var(--sp-5);}
     .band-col-name{font-size:var(--text-lg);font-weight:700;color:var(--navy);margin-bottom:4px;}
     .band-col-range{font-size:var(--text-xs);color:var(--text-muted);font-weight:500;}
@@ -513,6 +516,15 @@
 
   pills.forEach(function(p){
     p.addEventListener('click', function(){ selectBand(this.dataset.band); });
+  });
+
+  // Clicking a non-active column also selects that band (mobile keeps stacked behaviour)
+  bandCols.forEach(function(c){
+    c.addEventListener('click', function(e){
+      if (e.target.closest('a, button')) return; // let CTAs work normally
+      if (this.classList.contains('highlight')) return;
+      selectBand(this.dataset.band);
+    });
   });
 
   // Initialise on Growth
