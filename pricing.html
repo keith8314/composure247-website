@@ -59,7 +59,25 @@
     .tier-cta{display:block;width:100%;text-align:center;font-size:var(--text-xs);padding:9px 12px;}
 
     /* What's included section */
-    .included-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--sp-6);align-items:stretch;}
+    .included-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:var(--sp-6);align-items:stretch;max-width:920px;margin:0 auto;}
+    @media (max-width: 768px){ .included-grid{grid-template-columns:1fr;} }
+
+    /* Enterprise add-ons block */
+    .enterprise-addons{margin-top:var(--sp-12);background:linear-gradient(135deg,var(--navy) 0%,var(--navy-mid) 100%);border-radius:var(--radius-xl);padding:var(--sp-10);color:var(--white);position:relative;overflow:hidden;}
+    .enterprise-addons::before{content:'';position:absolute;top:0;right:0;width:300px;height:300px;background:radial-gradient(circle,rgba(16,185,129,0.18) 0%,transparent 70%);pointer-events:none;}
+    .enterprise-addons-grid{display:grid;grid-template-columns:1fr 1.4fr;gap:var(--sp-10);align-items:start;position:relative;z-index:1;}
+    @media (max-width: 900px){ .enterprise-addons{padding:var(--sp-8) var(--sp-6);} .enterprise-addons-grid{grid-template-columns:1fr;gap:var(--sp-6);} }
+    .enterprise-addons-label{display:inline-block;font-size:11px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--success);background:rgba(16,185,129,0.16);padding:5px 12px;border-radius:var(--radius-full);margin-bottom:var(--sp-4);}
+    .enterprise-addons h3{color:var(--white);font-size:1.6rem;margin-bottom:var(--sp-3);letter-spacing:-0.01em;}
+    .enterprise-addons p{color:rgba(255,255,255,0.78);margin-bottom:var(--sp-5);font-size:var(--text-sm);line-height:1.6;}
+    .enterprise-addons-meta{display:flex;flex-direction:column;gap:var(--sp-2);font-size:var(--text-xs);color:rgba(255,255,255,0.65);margin-bottom:var(--sp-6);}
+    .enterprise-addons-meta div{display:flex;gap:8px;align-items:center;}
+    .enterprise-addons-meta svg{color:var(--success);flex-shrink:0;}
+    .enterprise-addons-list{display:grid;grid-template-columns:repeat(2,1fr);gap:var(--sp-3) var(--sp-5);}
+    @media (max-width: 600px){ .enterprise-addons-list{grid-template-columns:1fr;} }
+    .enterprise-addons-list .addon{display:flex;align-items:flex-start;gap:10px;font-size:var(--text-sm);color:rgba(255,255,255,0.92);line-height:1.45;}
+    .enterprise-addons-list svg{color:var(--success);margin-top:3px;flex-shrink:0;}
+    .enterprise-addons-cta{margin-top:var(--sp-4);}
     .included-card{display:flex;flex-direction:column;background:var(--white);border:1px solid var(--border-light);border-radius:var(--radius-xl);padding:0;overflow:hidden;position:relative;transition:var(--transition);}
     .included-card:hover{transform:translateY(-2px);box-shadow:var(--shadow-md);}
     .included-card.communicate{border-color:var(--accent);box-shadow:0 0 0 2px var(--accent-glow),0 8px 24px -12px rgba(59,127,234,0.25);}
@@ -302,26 +320,13 @@
   </div>
 </section>
 
-<!-- ENTERPRISE CALLOUT -->
-<section class="section" style="padding-top:0;">
-  <div class="container">
-    <div class="enterprise-callout fade-up">
-      <div class="enterprise-callout-text">
-        <h3>Running a larger operation?</h3>
-        <p>If you manage 500+ clients or need custom SLAs, SSO, or a dedicated CSM, we'll build a package around your requirements. Most Enterprise customers are live within 2 weeks.</p>
-      </div>
-      <a href="contact.html" class="btn btn-white btn-lg">Book a call →</a>
-    </div>
-  </div>
-</section>
-
 <!-- WHAT'S INCLUDED -->
 <section class="section section-alt" aria-labelledby="included-heading">
   <div class="container">
     <div class="section-header fade-up">
       <div class="eyebrow-tag">What's included</div>
-      <h2 id="included-heading">Two tiers. Plus Enterprise.</h2>
-      <p>Communicate is the full platform — including white label branding — at every band. There is no separate Platform tier.</p>
+      <h2 id="included-heading">Two tiers — pick one</h2>
+      <p>Every band (Starter, Growth, Scale, Enterprise) lets you choose between <strong>Respond</strong> or <strong>Communicate</strong>. Same platform, different scope. Communicate is the full product, including white label branding.</p>
     </div>
 
     <div class="included-grid fade-up">
@@ -376,30 +381,35 @@
         </div>
       </div>
 
-      <!-- Enterprise -->
-      <div class="included-card enterprise">
-        <div class="included-bar"></div>
-        <div class="included-card-recommended">Bespoke</div>
-        <div class="included-card-head">
-          <span class="included-card-tier">For 500+ clients</span>
-          <div class="included-card-name">Enterprise</div>
-          <div class="included-card-price"><strong>From £1,500</strong> / month</div>
-          <p class="included-card-tagline">Custom contract built around your operation — SLAs, SSO, dedicated CSM, and multi-entity support.</p>
-        </div>
-        <div class="included-card-body">
-          <div class="included-list-label">Everything in Communicate, plus</div>
-          <div class="included-list">
-            <div class="pricing-feature"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>Dedicated Customer Success Manager</div>
-            <div class="pricing-feature"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>Contracted SLA on platform uptime</div>
-            <div class="pricing-feature"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>SSO / SAML integration</div>
-            <div class="pricing-feature"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>Custom onboarding &amp; playbook configuration</div>
-            <div class="pricing-feature"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>API access</div>
-            <div class="pricing-feature"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>Quarterly Business Reviews</div>
-            <div class="pricing-feature"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>Multi-entity / group MSP support</div>
-            <div class="pricing-feature"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>Bespoke contract terms</div>
+    </div>
+
+    <!-- Enterprise band add-ons -->
+    <div class="enterprise-addons fade-up">
+      <div class="enterprise-addons-grid">
+        <div>
+          <span class="enterprise-addons-label">Enterprise band — 500+ clients</span>
+          <h3>Need more? Add the Enterprise package.</h3>
+          <p>If you manage 500+ clients or need a contracted SLA, SSO, or a dedicated CSM, we'll wrap a bespoke package around your chosen tier. Most Enterprise customers are live within 2 weeks.</p>
+          <div class="enterprise-addons-meta">
+            <div><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>From £1,500/month on Communicate</div>
+            <div><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>Bespoke contract terms</div>
+            <div><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>Live within 2 weeks</div>
           </div>
-          <div class="included-card-foot">
-            <a href="contact.html" class="btn" style="background:var(--success);color:var(--white);width:100%;text-align:center;">Book a call →</a>
+          <div class="enterprise-addons-cta">
+            <a href="contact.html" class="btn" style="background:var(--success);color:var(--white);">Book a call →</a>
+          </div>
+        </div>
+        <div>
+          <div class="included-list-label" style="color:rgba(255,255,255,0.55);margin-bottom:var(--sp-4);">Enterprise adds on top</div>
+          <div class="enterprise-addons-list">
+            <div class="addon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>Dedicated Customer Success Manager</div>
+            <div class="addon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>Contracted SLA on platform uptime</div>
+            <div class="addon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>SSO / SAML integration</div>
+            <div class="addon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>Custom onboarding &amp; playbook config</div>
+            <div class="addon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>API access</div>
+            <div class="addon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>Quarterly Business Reviews</div>
+            <div class="addon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>Multi-entity / group MSP support</div>
+            <div class="addon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>Bespoke contract terms</div>
           </div>
         </div>
       </div>
