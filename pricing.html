@@ -3,71 +3,89 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Simple, transparent pricing for Composure — the AI-powered MSP client communication platform. Respond from £99/month, Communicate from £199/month, Platform from £349/month.">
+  <meta name="description" content="Composure pricing — banded by client count. Respond from £149/mo, Communicate (full platform with white label) from £299/mo. Enterprise from £1,500/mo.">
   <title>Pricing — Composure</title>
   <link rel="stylesheet" href="css/styles.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <style>
-    .toggle-wrap {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: var(--sp-4);
-      margin-bottom: var(--sp-12);
+    /* Toggle (monthly/annual) */
+    .toggle-wrap{display:flex;align-items:center;justify-content:center;gap:var(--sp-4);margin-bottom:var(--sp-6);}
+    .toggle-label{font-size:var(--text-sm);font-weight:600;color:var(--text-muted);}
+    .toggle-label.active{color:var(--navy);}
+    .toggle-switch{position:relative;width:52px;height:28px;}
+    .toggle-switch input{opacity:0;width:0;height:0;}
+    .toggle-track{position:absolute;inset:0;background:var(--border);border-radius:28px;cursor:pointer;transition:var(--transition);}
+    .toggle-track::before{content:'';position:absolute;width:20px;height:20px;border-radius:50%;background:white;top:4px;left:4px;transition:var(--transition);box-shadow:var(--shadow-sm);}
+    .toggle-switch input:checked + .toggle-track{background:var(--accent);}
+    .toggle-switch input:checked + .toggle-track::before{transform:translateX(24px);}
+    .annual-savings{display:none;align-items:center;padding:var(--sp-1) var(--sp-3);background:var(--success-bg);border:1px solid rgba(16,185,129,0.2);border-radius:var(--radius-full);font-size:var(--text-xs);font-weight:700;color:#059669;gap:var(--sp-1);}
+    .annual-savings.show{display:inline-flex;}
+
+    /* Band selector */
+    .band-selector{display:flex;flex-direction:column;align-items:center;gap:var(--sp-3);margin-bottom:var(--sp-8);}
+    .band-selector-label{font-size:var(--text-sm);font-weight:600;color:var(--text-muted);}
+    .band-pills{display:inline-flex;flex-wrap:wrap;justify-content:center;gap:var(--sp-2);background:var(--surface);padding:6px;border-radius:var(--radius-full);border:1px solid var(--border-light);}
+    .band-pill{padding:9px 18px;border-radius:var(--radius-full);border:none;background:transparent;font-size:var(--text-sm);font-weight:600;color:var(--text-muted);cursor:pointer;transition:var(--transition);white-space:nowrap;}
+    .band-pill:hover{color:var(--navy);}
+    .band-pill.active{background:var(--white);color:var(--navy);box-shadow:var(--shadow-sm);}
+
+    /* Bands grid */
+    .bands-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:var(--sp-4);align-items:stretch;}
+    .band-col{display:flex;flex-direction:column;background:var(--white);border:1px solid var(--border-light);border-radius:var(--radius-xl);padding:var(--sp-6);transition:var(--transition);position:relative;}
+    .band-col.highlight{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-glow);}
+    .band-col.enterprise{border-color:rgba(16,185,129,0.35);background:linear-gradient(180deg,rgba(16,185,129,0.04) 0%,var(--white) 60%);}
+    .band-col.enterprise.highlight{box-shadow:0 0 0 3px rgba(16,185,129,0.18);border-color:var(--success);}
+    .band-col-head{padding-bottom:var(--sp-4);border-bottom:1px solid var(--border-light);margin-bottom:var(--sp-5);}
+    .band-col-name{font-size:var(--text-lg);font-weight:700;color:var(--navy);margin-bottom:4px;}
+    .band-col-range{font-size:var(--text-xs);color:var(--text-muted);font-weight:500;}
+    .band-badge{position:absolute;top:-12px;right:var(--sp-5);background:var(--success);color:var(--white);padding:4px 10px;border-radius:var(--radius-full);font-size:11px;font-weight:700;letter-spacing:0.04em;text-transform:uppercase;}
+
+    /* Tier rows within a band */
+    .tier-row{padding:var(--sp-4) 0;}
+    .tier-row + .tier-row{border-top:1px solid var(--border-light);}
+    .tier-row.communicate{background:rgba(59,127,234,0.04);margin:0 calc(-1 * var(--sp-6));padding-left:var(--sp-6);padding-right:var(--sp-6);border-left:3px solid var(--accent);position:relative;}
+    .tier-row-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;}
+    .tier-name{font-size:var(--text-xs);font-weight:700;letter-spacing:0.06em;text-transform:uppercase;color:var(--navy);}
+    .tier-rec-badge{font-size:10px;font-weight:700;letter-spacing:0.04em;text-transform:uppercase;color:var(--accent);background:var(--accent-glow);padding:2px 8px;border-radius:var(--radius-full);}
+    .tier-price{display:flex;align-items:baseline;gap:4px;margin-bottom:var(--sp-3);min-height:38px;}
+    .tier-price .currency{font-size:var(--text-base);font-weight:600;color:var(--navy);}
+    .tier-price .amount{font-size:1.7rem;font-weight:800;color:var(--navy);line-height:1;letter-spacing:-0.01em;}
+    .tier-price .period{font-size:var(--text-xs);color:var(--text-muted);font-weight:500;}
+    .tier-price.contact .amount{font-size:var(--text-lg);font-weight:700;color:var(--text-muted);}
+    .tier-cta{display:block;width:100%;text-align:center;font-size:var(--text-xs);padding:9px 12px;}
+
+    /* What's included section */
+    .included-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--sp-6);}
+    .included-card{background:var(--white);border:1px solid var(--border-light);border-radius:var(--radius-xl);padding:var(--sp-7);}
+    .included-card.communicate{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-glow);}
+    .included-card.enterprise{border-color:rgba(16,185,129,0.35);background:linear-gradient(180deg,rgba(16,185,129,0.04) 0%,var(--white) 60%);}
+    .included-card-head{margin-bottom:var(--sp-5);padding-bottom:var(--sp-4);border-bottom:1px solid var(--border-light);}
+    .included-card-tier{font-size:var(--text-xs);font-weight:700;letter-spacing:0.06em;text-transform:uppercase;color:var(--text-muted);margin-bottom:6px;}
+    .included-card-name{font-size:var(--text-xl);font-weight:700;color:var(--navy);}
+    .included-list{display:flex;flex-direction:column;gap:var(--sp-3);}
+    .included-list .pricing-feature{font-size:var(--text-sm);}
+
+    /* Enterprise callout */
+    .enterprise-callout{background:var(--navy);color:var(--white);border-radius:var(--radius-xl);padding:var(--sp-8) var(--sp-10);display:flex;align-items:center;justify-content:space-between;gap:var(--sp-6);flex-wrap:wrap;}
+    .enterprise-callout-text h3{color:var(--white);margin-bottom:var(--sp-2);}
+    .enterprise-callout-text p{color:rgba(255,255,255,0.78);margin:0;max-width:560px;}
+
+    /* Comparison table */
+    .comparison-section{overflow-x:auto;}
+    .comparison-wrapper{min-width:560px;}
+
+    /* Responsive */
+    @media (max-width: 1024px){
+      .bands-grid{grid-template-columns:repeat(2,1fr);}
+      .included-grid{grid-template-columns:1fr;}
     }
-    .toggle-label {
-      font-size: var(--text-sm);
-      font-weight: 600;
-      color: var(--text-muted);
+    @media (max-width: 640px){
+      .bands-grid{grid-template-columns:1fr;}
+      .band-col{display:none;}
+      .band-col.show{display:flex;}
+      .enterprise-callout{padding:var(--sp-6);}
     }
-    .toggle-label.active { color: var(--navy); }
-    .toggle-switch {
-      position: relative;
-      width: 52px;
-      height: 28px;
-    }
-    .toggle-switch input { opacity: 0; width: 0; height: 0; }
-    .toggle-track {
-      position: absolute;
-      inset: 0;
-      background: var(--border);
-      border-radius: 28px;
-      cursor: pointer;
-      transition: var(--transition);
-    }
-    .toggle-track::before {
-      content: '';
-      position: absolute;
-      width: 20px;
-      height: 20px;
-      border-radius: 50%;
-      background: white;
-      top: 4px;
-      left: 4px;
-      transition: var(--transition);
-      box-shadow: var(--shadow-sm);
-    }
-    .toggle-switch input:checked + .toggle-track {
-      background: var(--accent);
-    }
-    .toggle-switch input:checked + .toggle-track::before {
-      transform: translateX(24px);
-    }
-    .annual-savings {
-      display: none;
-      align-items: center;
-      padding: var(--sp-1) var(--sp-3);
-      background: var(--success-bg);
-      border: 1px solid rgba(16,185,129,0.2);
-      border-radius: var(--radius-full);
-      font-size: var(--text-xs);
-      font-weight: 700;
-      color: #059669;
-      gap: var(--sp-1);
-    }
-    .comparison-section { overflow-x: auto; }
-    .comparison-wrapper { min-width: 680px; }
   </style>
 </head>
 <body>
@@ -104,8 +122,8 @@
 <section class="page-hero">
   <div class="container" style="position:relative;z-index:1;">
     <div class="eyebrow-tag" style="display:inline-flex;margin-bottom:var(--sp-3);">Transparent pricing</div>
-    <h1>Simple pricing built for MSPs</h1>
-    <p>No per-user pricing. No hidden fees. No enterprise contract negotiations. Choose the plan that fits your MSP, upgrade when you're ready, and cancel any time.</p>
+    <h1>Pricing that scales with your MSP</h1>
+    <p>Simple, transparent pricing based on how many clients you manage. No hidden fees. No per-seat charges. One flat monthly price per band.</p>
     <div style="display:flex;gap:var(--sp-3);justify-content:center;align-items:center;flex-wrap:wrap;">
       <span class="security-badge"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>14-day free trial</span>
       <span class="security-badge"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>No card required to start</span>
@@ -114,12 +132,12 @@
   </div>
 </section>
 
-<!-- PRICING CARDS -->
+<!-- PRICING MATRIX -->
 <section class="section" aria-labelledby="pricing-heading">
   <div class="container">
 
     <!-- Monthly / Annual Toggle -->
-    <div class="toggle-wrap">
+    <div class="toggle-wrap" id="pricing-heading">
       <span class="toggle-label active" id="toggle-monthly">Monthly</span>
       <label class="toggle-switch">
         <input type="checkbox" id="pricing-toggle">
@@ -128,123 +146,212 @@
       <span class="toggle-label" id="toggle-annual">Annual</span>
       <div class="annual-savings" id="pricing-savings">
         <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>
-        Save 20%
+        Save 2 months
+      </div>
+    </div>
+    <p style="text-align:center;font-size:var(--text-sm);color:var(--text-muted);margin-bottom:var(--sp-8);">Pay annually — get 2 months free.</p>
+
+    <!-- Band Selector -->
+    <div class="band-selector fade-up">
+      <div class="band-selector-label">How many clients do you manage?</div>
+      <div class="band-pills" role="tablist" aria-label="Client count band">
+        <button class="band-pill" data-band="Starter" role="tab" aria-selected="false">1–25</button>
+        <button class="band-pill active" data-band="Growth" role="tab" aria-selected="true">26–100</button>
+        <button class="band-pill" data-band="Scale" role="tab" aria-selected="false">101–500</button>
+        <button class="band-pill" data-band="Enterprise" role="tab" aria-selected="false">500+</button>
       </div>
     </div>
 
-    <div class="pricing-grid fade-up" id="pricing-heading">
-      <!-- RESPOND -->
-      <div class="pricing-card">
-        <div class="pricing-tier">Respond</div>
-        <div class="pricing-name">Respond</div>
-        <div class="pricing-description">Core incident communication for MSPs who need to stop the silence during P0 and P1 events — immediately.</div>
-        <div class="pricing-price">
-          <span class="pricing-currency">£</span><span class="pricing-amount" data-monthly="99">99</span>
-          <div class="pricing-period">/ month</div>
+    <!-- Bands grid: 4 columns on desktop, filtered by band selector on mobile -->
+    <div class="bands-grid fade-up" id="bands-grid">
+
+      <!-- STARTER -->
+      <div class="band-col" data-band="Starter">
+        <div class="band-col-head">
+          <div class="band-col-name">Starter</div>
+          <div class="band-col-range">1–25 clients</div>
         </div>
-        <a href="contact.html#trial" class="btn btn-secondary" style="width:100%;text-align:center;margin-bottom:var(--sp-6);">Start free trial</a>
-        <div class="pricing-features">
-          <div class="pricing-feature"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg><span><strong>Incident communication</strong> — P0 and P1</span></div>
-          <div class="pricing-feature"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>AI-generated stakeholder messages</div>
-          <div class="pricing-feature"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>Role-calibrated AI messaging</div>
-          <div class="pricing-feature"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>Per-contact preview and editing</div>
-          <div class="pricing-feature"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>Multi-channel delivery (email &amp; SMS)</div>
-          <div class="pricing-feature"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>Scheduled holding updates</div>
-          <div class="pricing-feature"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>Client status page</div>
-          <div class="pricing-feature"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>AI post-incident report with approval workflow</div>
-          <div class="pricing-feature"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>Communication playbooks</div>
-          <div class="pricing-feature"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>Audit trail and governance</div>
-          <div class="pricing-feature"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>Mobile app support</div>
+        <div class="tier-row">
+          <div class="tier-row-head"><span class="tier-name">Respond</span></div>
+          <div class="tier-price">
+            <span class="currency">£</span>
+            <span class="amount" data-tier="Respond" data-monthly="149" data-annual="1788">149</span>
+            <span class="period" data-period>/ month</span>
+          </div>
+          <a href="contact.html#trial" class="btn btn-secondary tier-cta">Start free trial</a>
         </div>
+        <div class="tier-row communicate">
+          <div class="tier-row-head"><span class="tier-name">Communicate</span><span class="tier-rec-badge">Recommended</span></div>
+          <div class="tier-price">
+            <span class="currency">£</span>
+            <span class="amount" data-tier="Communicate" data-monthly="299" data-annual="3588">299</span>
+            <span class="period" data-period>/ month</span>
+          </div>
+          <a href="contact.html#trial" class="btn btn-primary tier-cta">Start free trial</a>
+        </div>
+        <p style="font-size:11px;color:var(--text-subtle);margin-top:var(--sp-3);text-align:center;">14-day free trial — no credit card required</p>
       </div>
 
-      <!-- COMMUNICATE (POPULAR) -->
-      <div class="pricing-card popular">
-        <div class="popular-badge">Most popular</div>
-        <div class="pricing-tier">Communicate</div>
-        <div class="pricing-name">Communicate</div>
-        <div class="pricing-description">Full communication capability for MSPs ready to professionalise every client interaction — incidents, maintenance, and everything in between.</div>
-        <div class="pricing-price">
-          <span class="pricing-currency">£</span><span class="pricing-amount" data-monthly="199">199</span>
-          <div class="pricing-period">/ month</div>
+      <!-- GROWTH (default) -->
+      <div class="band-col highlight show" data-band="Growth">
+        <div class="band-col-head">
+          <div class="band-col-name">Growth</div>
+          <div class="band-col-range">26–100 clients</div>
         </div>
-        <a href="contact.html" class="btn btn-primary" style="width:100%;text-align:center;margin-bottom:var(--sp-6);">Book a demo</a>
-        <div class="pricing-features">
-          <div class="pricing-feature"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg><span><strong>Everything in Respond</strong></span></div>
-          <div class="pricing-feature"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>General communications and service updates</div>
-          <div class="pricing-feature"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>Planned maintenance notices and workflows</div>
-          <div class="pricing-feature"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>Scheduled communication sequences</div>
-          <div class="pricing-feature"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>Templates library with personalisation tokens</div>
-          <div class="pricing-feature"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>AM and CSM internal briefings</div>
-          <div class="pricing-feature"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>Internal update chasing with canned responses</div>
-          <div class="pricing-feature"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>Usage dashboard</div>
-          <div class="pricing-feature"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>Acknowledgement tracking</div>
-          <div class="pricing-feature"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>Failed delivery detection and retry</div>
+        <div class="tier-row">
+          <div class="tier-row-head"><span class="tier-name">Respond</span></div>
+          <div class="tier-price">
+            <span class="currency">£</span>
+            <span class="amount" data-tier="Respond" data-monthly="249" data-annual="2988">249</span>
+            <span class="period" data-period>/ month</span>
+          </div>
+          <a href="contact.html#trial" class="btn btn-secondary tier-cta">Start free trial</a>
         </div>
+        <div class="tier-row communicate">
+          <div class="tier-row-head"><span class="tier-name">Communicate</span><span class="tier-rec-badge">Recommended</span></div>
+          <div class="tier-price">
+            <span class="currency">£</span>
+            <span class="amount" data-tier="Communicate" data-monthly="499" data-annual="5988">499</span>
+            <span class="period" data-period>/ month</span>
+          </div>
+          <a href="contact.html#trial" class="btn btn-primary tier-cta">Start free trial</a>
+        </div>
+        <p style="font-size:11px;color:var(--text-subtle);margin-top:var(--sp-3);text-align:center;">14-day free trial — no credit card required</p>
       </div>
 
-      <!-- PLATFORM -->
-      <div class="pricing-card">
-        <div class="pricing-tier">Platform</div>
-        <div class="pricing-name">Platform</div>
-        <div class="pricing-description">The complete platform for MSPs operating at scale, managing enterprise clients, or building communication into a branded competitive advantage.</div>
-        <div class="pricing-price">
-          <span class="pricing-currency">£</span><span class="pricing-amount" data-monthly="349">349</span>
-          <div class="pricing-period">/ month</div>
+      <!-- SCALE -->
+      <div class="band-col" data-band="Scale">
+        <div class="band-col-head">
+          <div class="band-col-name">Scale</div>
+          <div class="band-col-range">101–500 clients</div>
         </div>
-        <a href="contact.html#trial" class="btn btn-secondary" style="width:100%;text-align:center;margin-bottom:var(--sp-6);">Start free trial</a>
-        <div class="pricing-features">
-          <div class="pricing-feature"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg><span><strong>Everything in Communicate</strong></span></div>
-          <div class="pricing-feature"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>White-label branding (your logo, your domain)</div>
-          <div class="pricing-feature"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>Advanced analytics and reporting</div>
-          <div class="pricing-feature"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>API access</div>
-          <div class="pricing-feature"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>Priority support with named contact</div>
-          <div class="pricing-feature"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>Multi-brand capability</div>
-          <div class="pricing-feature"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>Custom onboarding and account review</div>
+        <div class="tier-row">
+          <div class="tier-row-head"><span class="tier-name">Respond</span></div>
+          <div class="tier-price">
+            <span class="currency">£</span>
+            <span class="amount" data-tier="Respond" data-monthly="399" data-annual="4788">399</span>
+            <span class="period" data-period>/ month</span>
+          </div>
+          <a href="contact.html#trial" class="btn btn-secondary tier-cta">Start free trial</a>
         </div>
+        <div class="tier-row communicate">
+          <div class="tier-row-head"><span class="tier-name">Communicate</span><span class="tier-rec-badge">Recommended</span></div>
+          <div class="tier-price">
+            <span class="currency">£</span>
+            <span class="amount" data-tier="Communicate" data-monthly="899" data-annual="10788">899</span>
+            <span class="period" data-period>/ month</span>
+          </div>
+          <a href="contact.html#trial" class="btn btn-primary tier-cta">Start free trial</a>
+        </div>
+        <p style="font-size:11px;color:var(--text-subtle);margin-top:var(--sp-3);text-align:center;">14-day free trial — no credit card required</p>
       </div>
+
+      <!-- ENTERPRISE -->
+      <div class="band-col enterprise" data-band="Enterprise">
+        <div class="band-badge">Enterprise</div>
+        <div class="band-col-head">
+          <div class="band-col-name">Enterprise</div>
+          <div class="band-col-range">500+ clients</div>
+        </div>
+        <div class="tier-row">
+          <div class="tier-row-head"><span class="tier-name">Respond</span></div>
+          <div class="tier-price contact">
+            <span class="amount">Contact us</span>
+          </div>
+          <a href="contact.html#contact" class="btn btn-secondary tier-cta">Contact us</a>
+        </div>
+        <div class="tier-row communicate">
+          <div class="tier-row-head"><span class="tier-name">Communicate</span><span class="tier-rec-badge" style="color:var(--success);background:rgba(16,185,129,0.12);">Bespoke</span></div>
+          <div class="tier-price">
+            <span class="amount" style="font-size:var(--text-sm);font-weight:600;color:var(--text-muted);margin-right:6px;">From</span>
+            <span class="currency">£</span>
+            <span class="amount">1,500</span>
+            <span class="period">/ month</span>
+          </div>
+          <a href="contact.html#contact" class="btn btn-primary tier-cta">Book a call</a>
+        </div>
+        <p style="font-size:11px;color:var(--text-subtle);margin-top:var(--sp-3);text-align:center;">Bespoke contract — most live within 2 weeks</p>
+      </div>
+
     </div>
 
-    <!-- Trial note -->
-    <div style="text-align:center;margin-top:var(--sp-8);padding:var(--sp-6);background:var(--surface);border-radius:var(--radius-xl);border:1px solid var(--border-light);" class="fade-up">
-      <h4 style="margin-bottom:var(--sp-2);">Start with a 14-day free trial — any plan, no card required</h4>
-      <p style="font-size:var(--text-sm);color:var(--text-muted);max-width:560px;margin:0 auto;">Try Composure free for 14 days. You'll have full access to all features on your chosen plan. No credit card required to start. If you decide Composure is right for your MSP, subscribing takes less than a minute.</p>
+    <p style="text-align:center;font-size:var(--text-xs);color:var(--text-subtle);margin-top:var(--sp-6);">All prices ex-VAT. Annual billing equals 10× monthly for 12 months access.</p>
+  </div>
+</section>
+
+<!-- ENTERPRISE CALLOUT -->
+<section class="section" style="padding-top:0;">
+  <div class="container">
+    <div class="enterprise-callout fade-up">
+      <div class="enterprise-callout-text">
+        <h3>Running a larger operation?</h3>
+        <p>If you manage 500+ clients or need custom SLAs, SSO, or a dedicated CSM, we'll build a package around your requirements. Most Enterprise customers are live within 2 weeks.</p>
+      </div>
+      <a href="contact.html" class="btn btn-white btn-lg">Book a call →</a>
     </div>
   </div>
 </section>
 
-<!-- PRICING PHILOSOPHY -->
-<section class="section section-alt" aria-label="Why our pricing works for MSPs">
+<!-- WHAT'S INCLUDED -->
+<section class="section section-alt" aria-labelledby="included-heading">
   <div class="container">
     <div class="section-header fade-up">
-      <div class="eyebrow-tag">Pricing philosophy</div>
-      <h2>Priced to make the decision easy</h2>
-      <p>Composure is priced to ensure that the decision to protect your client relationships is never a difficult one. We deliberately avoid per-user pricing, annual lock-ins, and enterprise contract theatrics.</p>
+      <div class="eyebrow-tag">What's included</div>
+      <h2 id="included-heading">Two tiers. Plus Enterprise.</h2>
+      <p>Communicate is the full platform — including white label branding — at every band. There is no separate Platform tier.</p>
     </div>
 
-    <div class="grid-3" style="gap:var(--sp-6);">
-      <div class="card fade-up stagger-1">
-        <div class="feature-icon" style="margin-bottom:var(--sp-4);">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+    <div class="included-grid fade-up">
+      <!-- Respond -->
+      <div class="included-card">
+        <div class="included-card-head">
+          <div class="included-card-tier">Tier 1 — Entry</div>
+          <div class="included-card-name">Respond</div>
         </div>
-        <h4 style="margin-bottom:var(--sp-2);">No per-user surprises</h4>
-        <p style="font-size:var(--text-sm);color:var(--text-muted);">Flat monthly pricing means your cost stays predictable as your team grows. Add as many users as you need without watching the bill climb.</p>
+        <div class="included-list">
+          <div class="pricing-feature"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>P0/P1 incident communications</div>
+          <div class="pricing-feature"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>Multi-channel send (email + SMS)</div>
+          <div class="pricing-feature"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>Client status page</div>
+          <div class="pricing-feature"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>Post-incident report with approval workflow</div>
+          <div class="pricing-feature"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>iPhone app — push notifications, approvals, update submissions</div>
+          <div class="pricing-feature"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>14-day free trial</div>
+        </div>
       </div>
 
-      <div class="card fade-up stagger-2">
-        <div class="feature-icon" style="margin-bottom:var(--sp-4);">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+      <!-- Communicate -->
+      <div class="included-card communicate">
+        <div class="included-card-head">
+          <div class="included-card-tier" style="color:var(--accent);">Tier 2 — Full platform <span style="background:var(--accent-glow);color:var(--accent);padding:2px 8px;border-radius:var(--radius-full);font-size:10px;margin-left:4px;">Recommended</span></div>
+          <div class="included-card-name">Communicate</div>
         </div>
-        <h4 style="margin-bottom:var(--sp-2);">No annual lock-in required</h4>
-        <p style="font-size:var(--text-sm);color:var(--text-muted);">Month-to-month by default. If you want to commit annually for a 20% saving, that's your choice — but we don't force it.</p>
+        <div class="included-list">
+          <div class="pricing-feature"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg><span><strong>Everything in Respond</strong></span></div>
+          <div class="pricing-feature"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>General communications module</div>
+          <div class="pricing-feature"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>Templates library</div>
+          <div class="pricing-feature"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>AM/CSM auto-inclusion on all communications</div>
+          <div class="pricing-feature"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg><strong>White label branding</strong> — badge as your own</div>
+          <div class="pricing-feature"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>Advanced analytics</div>
+          <div class="pricing-feature"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>Priority support</div>
+        </div>
       </div>
 
-      <div class="card fade-up stagger-3">
-        <div class="feature-icon" style="margin-bottom:var(--sp-4);">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+      <!-- Enterprise -->
+      <div class="included-card enterprise">
+        <div class="included-card-head">
+          <div class="included-card-tier" style="color:var(--success);">Tier 3 — Bespoke</div>
+          <div class="included-card-name">Enterprise</div>
         </div>
-        <h4 style="margin-bottom:var(--sp-2);">Start immediately</h4>
-        <p style="font-size:var(--text-sm);color:var(--text-muted);">No lengthy onboarding process, no professional services engagement. Most MSPs are live and communicating professionally within a single working day.</p>
+        <div class="included-list">
+          <div class="pricing-feature"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg><span><strong>Everything in Communicate</strong></span></div>
+          <div class="pricing-feature"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>Dedicated Customer Success Manager</div>
+          <div class="pricing-feature"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>Contracted SLA on platform uptime</div>
+          <div class="pricing-feature"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>SSO / SAML integration</div>
+          <div class="pricing-feature"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>Custom onboarding and playbook configuration</div>
+          <div class="pricing-feature"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>Quarterly Business Reviews</div>
+          <div class="pricing-feature"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>API access</div>
+          <div class="pricing-feature"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>Multi-entity / group MSP support</div>
+          <div class="pricing-feature"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>Bespoke contract terms</div>
+        </div>
       </div>
     </div>
   </div>
@@ -254,8 +361,9 @@
 <section class="section" aria-labelledby="comparison-table-heading">
   <div class="container">
     <div class="section-header fade-up">
-      <div class="eyebrow-tag">Full feature comparison</div>
-      <h2 id="comparison-table-heading">What's included in each plan</h2>
+      <div class="eyebrow-tag">Feature comparison</div>
+      <h2 id="comparison-table-heading">Respond vs Communicate</h2>
+      <p>Same platform, different scope. Communicate adds general comms, white label, and priority support to everything in Respond.</p>
     </div>
 
     <div class="comparison-section fade-up">
@@ -264,149 +372,30 @@
           <thead>
             <tr>
               <th>Feature</th>
-              <th>Respond<br><span style="font-size:var(--text-xs);font-weight:500;color:var(--text-muted);">£99/mo</span></th>
-              <th class="table-header-composure">Communicate<br><span style="font-size:var(--text-xs);font-weight:500;opacity:0.8;">£199/mo — Most popular</span></th>
-              <th>Platform<br><span style="font-size:var(--text-xs);font-weight:500;color:var(--text-muted);">£349/mo</span></th>
+              <th>Respond</th>
+              <th class="table-header-composure">Communicate<br><span style="font-size:var(--text-xs);font-weight:500;opacity:0.8;">Recommended</span></th>
             </tr>
           </thead>
           <tbody>
-            <tr><td colspan="4" style="background:var(--surface);font-size:var(--text-xs);font-weight:700;letter-spacing:0.06em;text-transform:uppercase;color:var(--text-subtle);padding:var(--sp-3) var(--sp-6);">Incident Communication</td></tr>
-            <tr>
-              <td>P0 and P1 incident communications</td>
-              <td><svg class="icon-check" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></td>
-              <td class="col-composure"><svg class="icon-check" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></td>
-              <td><svg class="icon-check" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></td>
-            </tr>
-            <tr>
-              <td>AI-generated stakeholder messaging</td>
-              <td><svg class="icon-check" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></td>
-              <td class="col-composure"><svg class="icon-check" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></td>
-              <td><svg class="icon-check" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></td>
-            </tr>
-            <tr>
-              <td>Role-calibrated messaging per contact</td>
-              <td><svg class="icon-check" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></td>
-              <td class="col-composure"><svg class="icon-check" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></td>
-              <td><svg class="icon-check" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></td>
-            </tr>
-            <tr>
-              <td>Per-contact preview and editing</td>
-              <td><svg class="icon-check" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></td>
-              <td class="col-composure"><svg class="icon-check" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></td>
-              <td><svg class="icon-check" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></td>
-            </tr>
-            <tr>
-              <td>Scheduled holding updates</td>
-              <td><svg class="icon-check" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></td>
-              <td class="col-composure"><svg class="icon-check" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></td>
-              <td><svg class="icon-check" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></td>
-            </tr>
-            <tr>
-              <td>Communication playbooks</td>
-              <td><svg class="icon-check" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></td>
-              <td class="col-composure"><svg class="icon-check" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></td>
-              <td><svg class="icon-check" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></td>
-            </tr>
-            <tr>
-              <td>Communication pause and resume</td>
-              <td><svg class="icon-check" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></td>
-              <td class="col-composure"><svg class="icon-check" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></td>
-              <td><svg class="icon-check" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></td>
-            </tr>
-            <tr><td colspan="4" style="background:var(--surface);font-size:var(--text-xs);font-weight:700;letter-spacing:0.06em;text-transform:uppercase;color:var(--text-subtle);padding:var(--sp-3) var(--sp-6);">Delivery &amp; Channels</td></tr>
-            <tr>
-              <td>HTML email delivery</td>
-              <td><svg class="icon-check" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></td>
-              <td class="col-composure"><svg class="icon-check" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></td>
-              <td><svg class="icon-check" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></td>
-            </tr>
-            <tr>
-              <td>SMS delivery</td>
-              <td><svg class="icon-check" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></td>
-              <td class="col-composure"><svg class="icon-check" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></td>
-              <td><svg class="icon-check" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></td>
-            </tr>
-            <tr>
-              <td>Client status page</td>
-              <td><svg class="icon-check" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></td>
-              <td class="col-composure"><svg class="icon-check" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></td>
-              <td><svg class="icon-check" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></td>
-            </tr>
-            <tr>
-              <td>Mobile app support</td>
-              <td><svg class="icon-check" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></td>
-              <td class="col-composure"><svg class="icon-check" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></td>
-              <td><svg class="icon-check" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></td>
-            </tr>
-            <tr>
-              <td>Acknowledgement tracking</td>
-              <td><svg class="icon-check" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></td>
-              <td class="col-composure"><svg class="icon-check" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></td>
-              <td><svg class="icon-check" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></td>
-            </tr>
-            <tr><td colspan="4" style="background:var(--surface);font-size:var(--text-xs);font-weight:700;letter-spacing:0.06em;text-transform:uppercase;color:var(--text-subtle);padding:var(--sp-3) var(--sp-6);">Planned &amp; Routine Communications</td></tr>
-            <tr>
-              <td>General communications and service updates</td>
-              <td style="color:var(--text-subtle);">—</td>
-              <td class="col-composure"><svg class="icon-check" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></td>
-              <td><svg class="icon-check" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></td>
-            </tr>
-            <tr>
-              <td>Planned maintenance workflows</td>
-              <td style="color:var(--text-subtle);">—</td>
-              <td class="col-composure"><svg class="icon-check" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></td>
-              <td><svg class="icon-check" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></td>
-            </tr>
-            <tr>
-              <td>Scheduled communication sequences</td>
-              <td style="color:var(--text-subtle);">—</td>
-              <td class="col-composure"><svg class="icon-check" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></td>
-              <td><svg class="icon-check" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></td>
-            </tr>
-            <tr>
-              <td>Templates library</td>
-              <td style="color:var(--text-subtle);">—</td>
-              <td class="col-composure"><svg class="icon-check" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></td>
-              <td><svg class="icon-check" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></td>
-            </tr>
-            <tr><td colspan="4" style="background:var(--surface);font-size:var(--text-xs);font-weight:700;letter-spacing:0.06em;text-transform:uppercase;color:var(--text-subtle);padding:var(--sp-3) var(--sp-6);">Internal &amp; AM Support</td></tr>
-            <tr>
-              <td>AM and CSM internal briefings</td>
-              <td style="color:var(--text-subtle);">—</td>
-              <td class="col-composure"><svg class="icon-check" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></td>
-              <td><svg class="icon-check" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></td>
-            </tr>
-            <tr>
-              <td>Usage dashboard</td>
-              <td style="color:var(--text-subtle);">—</td>
-              <td class="col-composure"><svg class="icon-check" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></td>
-              <td><svg class="icon-check" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></td>
-            </tr>
-            <tr><td colspan="4" style="background:var(--surface);font-size:var(--text-xs);font-weight:700;letter-spacing:0.06em;text-transform:uppercase;color:var(--text-subtle);padding:var(--sp-3) var(--sp-6);">Platform &amp; Enterprise</td></tr>
-            <tr>
-              <td>White-label branding</td>
-              <td style="color:var(--text-subtle);">—</td>
-              <td class="col-composure" style="color:var(--text-subtle);">—</td>
-              <td><svg class="icon-check" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></td>
-            </tr>
-            <tr>
-              <td>Advanced analytics</td>
-              <td style="color:var(--text-subtle);">—</td>
-              <td class="col-composure" style="color:var(--text-subtle);">—</td>
-              <td><svg class="icon-check" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></td>
-            </tr>
-            <tr>
-              <td>API access</td>
-              <td style="color:var(--text-subtle);">—</td>
-              <td class="col-composure" style="color:var(--text-subtle);">—</td>
-              <td><svg class="icon-check" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></td>
-            </tr>
-            <tr>
-              <td>Priority support</td>
-              <td style="color:var(--text-subtle);">Standard</td>
-              <td class="col-composure">Standard</td>
-              <td>Priority with named contact</td>
-            </tr>
+            <tr><td colspan="3" style="background:var(--surface);font-size:var(--text-xs);font-weight:700;letter-spacing:0.06em;text-transform:uppercase;color:var(--text-subtle);padding:var(--sp-3) var(--sp-6);">Incident Communication</td></tr>
+            <tr><td>P0 and P1 incident communications</td><td><svg class="icon-check" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></td><td class="col-composure"><svg class="icon-check" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></td></tr>
+            <tr><td>AI-generated stakeholder messaging</td><td><svg class="icon-check" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></td><td class="col-composure"><svg class="icon-check" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></td></tr>
+            <tr><td>Per-contact preview and editing</td><td><svg class="icon-check" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></td><td class="col-composure"><svg class="icon-check" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></td></tr>
+            <tr><td>Scheduled holding updates</td><td><svg class="icon-check" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></td><td class="col-composure"><svg class="icon-check" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></td></tr>
+            <tr><td>Post-incident report with approval workflow</td><td><svg class="icon-check" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></td><td class="col-composure"><svg class="icon-check" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></td></tr>
+            <tr><td colspan="3" style="background:var(--surface);font-size:var(--text-xs);font-weight:700;letter-spacing:0.06em;text-transform:uppercase;color:var(--text-subtle);padding:var(--sp-3) var(--sp-6);">Delivery &amp; Channels</td></tr>
+            <tr><td>Email + SMS delivery</td><td><svg class="icon-check" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></td><td class="col-composure"><svg class="icon-check" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></td></tr>
+            <tr><td>Client status page</td><td><svg class="icon-check" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></td><td class="col-composure"><svg class="icon-check" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></td></tr>
+            <tr><td>iPhone app (push, approvals, submissions)</td><td><svg class="icon-check" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></td><td class="col-composure"><svg class="icon-check" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></td></tr>
+            <tr><td colspan="3" style="background:var(--surface);font-size:var(--text-xs);font-weight:700;letter-spacing:0.06em;text-transform:uppercase;color:var(--text-subtle);padding:var(--sp-3) var(--sp-6);">Planned &amp; General Communications</td></tr>
+            <tr><td>General communications module</td><td style="color:var(--text-subtle);">—</td><td class="col-composure"><svg class="icon-check" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></td></tr>
+            <tr><td>Planned maintenance workflows</td><td style="color:var(--text-subtle);">—</td><td class="col-composure"><svg class="icon-check" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></td></tr>
+            <tr><td>Templates library with personalisation</td><td style="color:var(--text-subtle);">—</td><td class="col-composure"><svg class="icon-check" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></td></tr>
+            <tr><td>AM/CSM auto-inclusion</td><td style="color:var(--text-subtle);">—</td><td class="col-composure"><svg class="icon-check" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></td></tr>
+            <tr><td colspan="3" style="background:var(--surface);font-size:var(--text-xs);font-weight:700;letter-spacing:0.06em;text-transform:uppercase;color:var(--text-subtle);padding:var(--sp-3) var(--sp-6);">Branding, Analytics &amp; Support</td></tr>
+            <tr><td>White-label branding</td><td style="color:var(--text-subtle);">—</td><td class="col-composure"><svg class="icon-check" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></td></tr>
+            <tr><td>Advanced analytics and reporting</td><td style="color:var(--text-subtle);">—</td><td class="col-composure"><svg class="icon-check" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></td></tr>
+            <tr><td>Support level</td><td style="color:var(--text-subtle);">Standard</td><td class="col-composure">Priority</td></tr>
           </tbody>
         </table>
       </div>
@@ -423,24 +412,28 @@
     </div>
     <div class="faq-list fade-up">
       <div class="faq-item">
-        <button class="faq-question">Is there a free trial?<div class="faq-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></div></button>
-        <div class="faq-answer"><div class="faq-answer-inner">Yes. Every plan includes a 14-day free trial with full access to all features on your chosen tier. No credit card is required to start your trial.</div></div>
+        <button class="faq-question">How do you count clients?<div class="faq-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></div></button>
+        <div class="faq-answer"><div class="faq-answer-inner">A client is any end-customer organisation you manage communications for inside Composure. You can update your band at any time — we'll prorate the difference.</div></div>
       </div>
       <div class="faq-item">
-        <button class="faq-question">Can I change plans later?<div class="faq-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></div></button>
-        <div class="faq-answer"><div class="faq-answer-inner">Yes. You can upgrade or downgrade your plan at any time. Upgrades take effect immediately and you'll be billed pro-rata for the remainder of the month. Downgrades take effect at the start of your next billing cycle.</div></div>
+        <button class="faq-question">Can I start on Respond and upgrade to Communicate later?<div class="faq-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></div></button>
+        <div class="faq-answer"><div class="faq-answer-inner">Yes. You can upgrade at any time and we'll prorate the cost. Most MSPs move to Communicate within the first 60 days once they see the full platform.</div></div>
       </div>
       <div class="faq-item">
-        <button class="faq-question">Is there per-user pricing?<div class="faq-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></div></button>
-        <div class="faq-answer"><div class="faq-answer-inner">No. All Composure plans are flat-rate monthly subscriptions. There is no per-user or per-seat pricing. Add your entire team without any cost impact.</div></div>
+        <button class="faq-question">Is there a setup fee?<div class="faq-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></div></button>
+        <div class="faq-answer"><div class="faq-answer-inner">No. All plans include onboarding. Enterprise customers receive dedicated onboarding support as part of their package.</div></div>
       </div>
       <div class="faq-item">
-        <button class="faq-question">What happens if I cancel?<div class="faq-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></div></button>
-        <div class="faq-answer"><div class="faq-answer-inner">You can cancel any time. You'll retain full access until the end of your current billing period. Your data remains accessible for 90 days after cancellation for export purposes, after which it is securely deleted.</div></div>
+        <button class="faq-question">What happens at the end of my free trial?<div class="faq-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></div></button>
+        <div class="faq-answer"><div class="faq-answer-inner">You'll be prompted to enter payment details. We don't charge you until you choose a plan. If you do nothing, your account pauses — your data is retained for 30 days.</div></div>
       </div>
       <div class="faq-item">
-        <button class="faq-question">Do you offer discounts for MSPs managing multiple brands?<div class="faq-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></div></button>
-        <div class="faq-answer"><div class="faq-answer-inner">The Platform plan includes multi-brand capability. For MSPs managing multiple entities or looking for volume arrangements, please contact us to discuss options. We're happy to find the right structure for your business.</div></div>
+        <button class="faq-question">Do you offer discounts for longer contracts?<div class="faq-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></div></button>
+        <div class="faq-answer"><div class="faq-answer-inner">Annual billing gives you 2 months free. For multi-year Enterprise contracts, speak to us directly.</div></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-question">Is white label included?<div class="faq-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></div></button>
+        <div class="faq-answer"><div class="faq-answer-inner">Yes — white label branding is included in all Communicate plans, including Starter. There is no separate Platform tier.</div></div>
       </div>
     </div>
   </div>
@@ -474,16 +467,57 @@
 
 <script src="js/main.js"></script>
 <script>
-  // Toggle label active state
-  const toggle = document.getElementById('pricing-toggle');
-  const monthlyLabel = document.getElementById('toggle-monthly');
-  const annualLabel  = document.getElementById('toggle-annual');
-  if (toggle) {
-    toggle.addEventListener('change', function() {
-      monthlyLabel.classList.toggle('active', !this.checked);
-      annualLabel.classList.toggle('active', this.checked);
+(function(){
+  // Monthly / Annual toggle
+  var toggle = document.getElementById('pricing-toggle');
+  var monthlyLabel = document.getElementById('toggle-monthly');
+  var annualLabel  = document.getElementById('toggle-annual');
+  var savingsBadge = document.getElementById('pricing-savings');
+  var amounts = document.querySelectorAll('.amount[data-monthly]');
+  var periods = document.querySelectorAll('[data-period]');
+
+  function fmt(n){ return n.toLocaleString('en-GB'); }
+
+  function applyPeriod(annual){
+    monthlyLabel.classList.toggle('active', !annual);
+    annualLabel.classList.toggle('active', annual);
+    savingsBadge.classList.toggle('show', annual);
+    amounts.forEach(function(el){
+      var v = annual ? el.dataset.annual : el.dataset.monthly;
+      if(v) el.textContent = fmt(parseInt(v,10));
+    });
+    periods.forEach(function(el){ el.textContent = annual ? '/ year' : '/ month'; });
+  }
+
+  if (toggle){
+    toggle.addEventListener('change', function(){ applyPeriod(this.checked); });
+  }
+
+  // Band selector — defaults to Growth
+  var pills = document.querySelectorAll('.band-pill');
+  var bandCols = document.querySelectorAll('.band-col');
+  var isMobile = function(){ return window.matchMedia('(max-width: 640px)').matches; };
+
+  function selectBand(band){
+    pills.forEach(function(p){
+      var on = p.dataset.band === band;
+      p.classList.toggle('active', on);
+      p.setAttribute('aria-selected', on ? 'true' : 'false');
+    });
+    bandCols.forEach(function(c){
+      var on = c.dataset.band === band;
+      c.classList.toggle('show', on);
+      c.classList.toggle('highlight', on);
     });
   }
+
+  pills.forEach(function(p){
+    p.addEventListener('click', function(){ selectBand(this.dataset.band); });
+  });
+
+  // Initialise on Growth
+  selectBand('Growth');
+})();
 </script>
 </body>
 </html>
