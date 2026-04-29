@@ -3,139 +3,414 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Composure pricing — banded by client count. Respond from £149/mo, Communicate (full platform with white label) from £299/mo. Enterprise from £1,500/mo.">
+  <meta name="description" content="Composure pricing — simple, transparent plans priced by client volume. Respond from £149/mo, Communicate (full platform with white-label) from £299/mo. Enterprise from £1,500/mo.">
   <title>Pricing — Composure</title>
   <link rel="stylesheet" href="css/styles.css">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <style>
-    /* Toggle (monthly/annual) */
-    .toggle-wrap{display:flex;align-items:center;justify-content:center;gap:var(--sp-4);margin-bottom:var(--sp-6);}
-    .toggle-label{font-size:var(--text-sm);font-weight:600;color:var(--text-muted);}
-    .toggle-label.active{color:var(--navy);}
-    .toggle-switch{position:relative;width:52px;height:28px;}
-    .toggle-switch input{opacity:0;width:0;height:0;}
-    .toggle-track{position:absolute;inset:0;background:var(--border);border-radius:28px;cursor:pointer;transition:var(--transition);}
-    .toggle-track::before{content:'';position:absolute;width:20px;height:20px;border-radius:50%;background:white;top:4px;left:4px;transition:var(--transition);box-shadow:var(--shadow-sm);}
-    .toggle-switch input:checked + .toggle-track{background:var(--accent);}
-    .toggle-switch input:checked + .toggle-track::before{transform:translateX(24px);}
-    .annual-savings{display:none;align-items:center;padding:var(--sp-1) var(--sp-3);background:var(--success-bg);border:1px solid rgba(16,185,129,0.2);border-radius:var(--radius-full);font-size:var(--text-xs);font-weight:700;color:#059669;gap:var(--sp-1);}
-    .annual-savings.show{display:inline-flex;}
+    /* ========================================================
+       PRICING PAGE — bespoke components on top of shared system
+       ======================================================== */
 
-    /* Band selector */
-    .band-selector{display:flex;flex-direction:column;align-items:center;gap:var(--sp-3);margin-bottom:var(--sp-8);}
-    .band-selector-label{font-size:var(--text-sm);font-weight:600;color:var(--text-muted);}
-    .band-pills{display:inline-flex;flex-wrap:wrap;justify-content:center;gap:var(--sp-2);background:var(--surface);padding:6px;border-radius:var(--radius-full);border:1px solid var(--border-light);}
-    .band-pill{padding:9px 18px;border-radius:var(--radius-full);border:none;background:transparent;font-size:var(--text-sm);font-weight:600;color:var(--text-muted);cursor:pointer;transition:var(--transition);white-space:nowrap;}
-    .band-pill:hover{color:var(--navy);}
-    .band-pill.active{background:var(--white);color:var(--navy);box-shadow:var(--shadow-sm);}
-
-    /* Bands grid */
-    .bands-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:var(--sp-4);align-items:stretch;}
-    .band-col{display:flex;flex-direction:column;background:var(--white);border:1px solid var(--border-light);border-radius:var(--radius-xl);padding:var(--sp-6);transition:transform 220ms ease, box-shadow 220ms ease, border-color 220ms ease, opacity 220ms ease;position:relative;cursor:pointer;opacity:0.55;transform:scale(0.98);}
-    .band-col:hover{opacity:0.85;border-color:var(--border);}
-    .band-col.highlight{border-color:var(--accent);border-width:2px;padding:calc(var(--sp-6) - 1px);box-shadow:0 12px 32px -12px rgba(59,127,234,0.45),0 0 0 4px var(--accent-glow);opacity:1;transform:scale(1);cursor:default;}
-    .band-col.highlight::before{content:'Selected';position:absolute;top:-12px;left:50%;transform:translateX(-50%);background:var(--accent);color:var(--white);padding:4px 12px;border-radius:var(--radius-full);font-size:10px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;white-space:nowrap;box-shadow:var(--shadow-sm);}
-    .band-col.enterprise{border-color:rgba(16,185,129,0.35);background:linear-gradient(180deg,rgba(16,185,129,0.04) 0%,var(--white) 60%);}
-    .band-col.enterprise.highlight{border-color:var(--success);box-shadow:0 12px 32px -12px rgba(16,185,129,0.45),0 0 0 4px rgba(16,185,129,0.18);}
-    .band-col.enterprise.highlight::before{background:var(--success);}
-    .band-col-head{padding-bottom:var(--sp-4);border-bottom:1px solid var(--border-light);margin-bottom:var(--sp-5);}
-    .band-col-name{font-size:var(--text-lg);font-weight:700;color:var(--navy);margin-bottom:4px;}
-    .band-col-range{font-size:var(--text-xs);color:var(--text-muted);font-weight:500;}
-    .band-badge{position:absolute;top:-12px;right:var(--sp-5);background:var(--success);color:var(--white);padding:4px 10px;border-radius:var(--radius-full);font-size:11px;font-weight:700;letter-spacing:0.04em;text-transform:uppercase;}
-
-    /* Tier rows within a band */
-    .tier-row{padding:var(--sp-4) 0;}
-    .tier-row + .tier-row{border-top:1px solid var(--border-light);}
-    .tier-row.communicate{background:rgba(59,127,234,0.04);margin:0 calc(-1 * var(--sp-6));padding-left:var(--sp-6);padding-right:var(--sp-6);border-left:3px solid var(--accent);position:relative;}
-    .tier-row-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;}
-    .tier-name{font-size:var(--text-xs);font-weight:700;letter-spacing:0.06em;text-transform:uppercase;color:var(--navy);}
-    .tier-rec-badge{font-size:10px;font-weight:700;letter-spacing:0.04em;text-transform:uppercase;color:var(--accent);background:var(--accent-glow);padding:2px 8px;border-radius:var(--radius-full);}
-    .tier-price{display:flex;align-items:baseline;gap:4px;margin-bottom:var(--sp-3);min-height:38px;}
-    .tier-price .currency{font-size:var(--text-base);font-weight:600;color:var(--navy);}
-    .tier-price .amount{font-size:1.7rem;font-weight:800;color:var(--navy);line-height:1;letter-spacing:-0.01em;}
-    .tier-price .period{font-size:var(--text-xs);color:var(--text-muted);font-weight:500;}
-    .tier-price.contact .amount{font-size:var(--text-lg);font-weight:700;color:var(--text-muted);}
-    .tier-cta{display:block;width:100%;text-align:center;font-size:var(--text-xs);padding:9px 12px;}
-
-    /* What's included section */
-    .included-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:var(--sp-6);align-items:stretch;max-width:920px;margin:0 auto;}
-    @media (max-width: 768px){ .included-grid{grid-template-columns:1fr;} }
-
-    /* Enterprise add-ons block */
-    .enterprise-addons{margin-top:var(--sp-12);background:linear-gradient(135deg,var(--navy) 0%,var(--navy-mid) 100%);border-radius:var(--radius-xl);padding:var(--sp-10);color:var(--white);position:relative;overflow:hidden;}
-    .enterprise-addons::before{content:'';position:absolute;top:0;right:0;width:300px;height:300px;background:radial-gradient(circle,rgba(16,185,129,0.18) 0%,transparent 70%);pointer-events:none;}
-    .enterprise-addons-grid{display:grid;grid-template-columns:1fr 1.4fr;gap:var(--sp-10);align-items:start;position:relative;z-index:1;}
-    @media (max-width: 900px){ .enterprise-addons{padding:var(--sp-8) var(--sp-6);} .enterprise-addons-grid{grid-template-columns:1fr;gap:var(--sp-6);} }
-    .enterprise-addons-label{display:inline-block;font-size:11px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--success);background:rgba(16,185,129,0.16);padding:5px 12px;border-radius:var(--radius-full);margin-bottom:var(--sp-4);}
-    .enterprise-addons h3{color:var(--white);font-size:1.6rem;margin-bottom:var(--sp-3);letter-spacing:-0.01em;}
-    .enterprise-addons p{color:rgba(255,255,255,0.78);margin-bottom:var(--sp-5);font-size:var(--text-sm);line-height:1.6;}
-    .enterprise-addons-meta{display:flex;flex-direction:column;gap:var(--sp-2);font-size:var(--text-xs);color:rgba(255,255,255,0.65);margin-bottom:var(--sp-6);}
-    .enterprise-addons-meta div{display:flex;gap:8px;align-items:center;}
-    .enterprise-addons-meta svg{color:var(--success);flex-shrink:0;}
-    .enterprise-addons-list{display:grid;grid-template-columns:repeat(2,1fr);gap:var(--sp-3) var(--sp-5);}
-    @media (max-width: 600px){ .enterprise-addons-list{grid-template-columns:1fr;} }
-    .enterprise-addons-list .addon{display:flex;align-items:flex-start;gap:10px;font-size:var(--text-sm);color:rgba(255,255,255,0.92);line-height:1.45;}
-    .enterprise-addons-list svg{color:var(--success);margin-top:3px;flex-shrink:0;}
-    .enterprise-addons-cta{margin-top:var(--sp-4);}
-    .included-card{display:flex;flex-direction:column;background:var(--white);border:1px solid var(--border-light);border-radius:var(--radius-xl);padding:0;overflow:hidden;position:relative;transition:var(--transition);}
-    .included-card:hover{transform:translateY(-2px);box-shadow:var(--shadow-md);}
-    .included-card.communicate{border-color:var(--accent);box-shadow:0 0 0 2px var(--accent-glow),0 8px 24px -12px rgba(59,127,234,0.25);}
-    .included-card.enterprise{border-color:rgba(16,185,129,0.35);}
-    .included-bar{height:6px;background:var(--border);}
-    .included-card.respond .included-bar{background:linear-gradient(90deg,var(--text-muted),var(--text-subtle));}
-    .included-card.communicate .included-bar{background:linear-gradient(90deg,var(--accent),var(--teal));}
-    .included-card.enterprise .included-bar{background:linear-gradient(90deg,var(--success),#0E9F8E);}
-    .included-card-recommended{position:absolute;top:18px;right:18px;background:var(--accent);color:var(--white);padding:5px 11px;border-radius:var(--radius-full);font-size:10px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;box-shadow:var(--shadow-sm);z-index:1;}
-    .included-card.enterprise .included-card-recommended{background:var(--success);}
-    .included-card-head{display:flex;flex-direction:column;align-items:flex-start;gap:var(--sp-3);padding:var(--sp-7);}
-    .included-card-tier{display:inline-block;font-size:11px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--text-muted);background:var(--surface);padding:5px 11px;border-radius:var(--radius-full);margin:0;line-height:1;}
-    .included-card.communicate .included-card-tier{color:var(--accent);background:var(--accent-glow);}
-    .included-card.enterprise .included-card-tier{color:var(--success);background:var(--success-bg);}
-    .included-card-name{font-size:1.75rem;font-weight:800;color:var(--navy);letter-spacing:-0.02em;margin:0;line-height:1;}
-    .included-card-price{display:flex;align-items:baseline;gap:6px;margin:0;line-height:1;}
-    .included-card-price .from{font-size:var(--text-xs);color:var(--text-muted);font-weight:600;letter-spacing:0.04em;text-transform:uppercase;}
-    .included-card-price .amount{font-size:1.6rem;font-weight:800;color:var(--navy);letter-spacing:-0.01em;}
-    .included-card-price .period{font-size:var(--text-sm);color:var(--text-muted);font-weight:500;}
-    .included-card-tagline{font-size:var(--text-sm);color:var(--text-muted);line-height:1.55;margin:0;}
-    .included-card-body{display:flex;flex-direction:column;padding:var(--sp-5) var(--sp-7) var(--sp-7);border-top:1px solid var(--border-light);background:#fafbfd;flex:1;}
-    .included-card.communicate .included-card-body{background:rgba(59,127,234,0.03);}
-    .included-card.enterprise .included-card-body{background:rgba(16,185,129,0.03);}
-    .included-list-label{font-size:11px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--text-subtle);margin:0 0 var(--sp-4);}
-    .included-list{display:flex;flex-direction:column;gap:12px;flex:1;margin:0;}
-    .included-list .pricing-feature{display:flex;align-items:flex-start;gap:10px;font-size:var(--text-sm);line-height:1.5;color:var(--navy);margin:0;}
-    .included-list .pricing-feature svg{margin-top:3px;flex-shrink:0;color:var(--accent);width:16px;height:16px;}
-    .included-card.respond .included-list .pricing-feature svg{color:var(--text-muted);}
-    .included-card.enterprise .included-list .pricing-feature svg{color:var(--success);}
-    .included-card-foot{margin-top:var(--sp-6);}
-    .included-card-foot .btn{display:block;width:100%;text-align:center;}
-
-    /* Enterprise callout */
-    .enterprise-callout{background:var(--navy);color:var(--white);border-radius:var(--radius-xl);padding:var(--sp-8) var(--sp-10);display:flex;align-items:center;justify-content:space-between;gap:var(--sp-6);flex-wrap:wrap;}
-    .enterprise-callout-text h3{color:var(--white);margin-bottom:var(--sp-2);}
-    .enterprise-callout-text p{color:rgba(255,255,255,0.78);margin:0;max-width:560px;}
-
-    /* Comparison table */
-    .comparison-section{overflow-x:auto;}
-    .comparison-wrapper{min-width:560px;}
-
-    /* Responsive */
-    @media (max-width: 1024px){
-      .bands-grid{grid-template-columns:repeat(2,1fr);}
-      .included-grid{grid-template-columns:1fr;}
+    /* Trust pill bar */
+    .trust-pillbar{
+      display:inline-flex;
+      align-items:center;
+      gap:24px;
+      padding:14px 22px;
+      background:var(--white);
+      border:1px solid var(--border);
+      border-radius:var(--radius-full);
+      box-shadow:var(--shadow-sm);
+      flex-wrap:wrap;
+      justify-content:center;
+      margin-top:var(--sp-6);
     }
-    @media (max-width: 640px){
-      .bands-grid{grid-template-columns:1fr;}
-      .band-col{display:none;}
-      .band-col.show{display:flex;}
-      .enterprise-callout{padding:var(--sp-6);}
+    .trust-pillbar-item{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      font-size:13.5px;
+      font-weight:500;
+      color:var(--navy);
     }
+    .trust-pillbar-item svg{color:var(--accent);flex-shrink:0;}
+    .trust-pillbar .sep{width:1px;height:18px;background:var(--border);}
+    @media (max-width:560px){
+      .trust-pillbar{flex-direction:column;gap:10px;padding:14px 22px;border-radius:var(--radius-xl);}
+      .trust-pillbar .sep{display:none;}
+    }
+
+    /* Controls */
+    .pricing-controls{
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      gap:22px;
+      margin-bottom:48px;
+    }
+    .controls-q{
+      font-family:var(--font-display);
+      font-size:1.25rem;
+      font-weight:580;
+      color:var(--navy);
+      letter-spacing:-0.015em;
+      font-variation-settings:"opsz" 36;
+    }
+
+    /* Band segmented selector */
+    .band-segments{
+      display:inline-flex;
+      align-items:stretch;
+      background:var(--white);
+      padding:6px;
+      border-radius:var(--radius-full);
+      border:1px solid var(--border);
+      box-shadow:var(--shadow-sm);
+      flex-wrap:wrap;
+      justify-content:center;
+    }
+    .band-seg{
+      display:inline-flex;
+      flex-direction:column;
+      align-items:center;
+      padding:11px 22px;
+      border-radius:var(--radius-full);
+      cursor:pointer;
+      transition:background .25s var(--ease),color .25s var(--ease),box-shadow .25s var(--ease);
+      min-width:110px;
+      background:none;
+      border:none;
+      font-family:inherit;
+    }
+    .band-seg-name{
+      font-family:var(--font-display);
+      font-size:1rem;
+      font-weight:600;
+      color:var(--navy);
+      letter-spacing:-0.01em;
+      line-height:1.1;
+    }
+    .band-seg-range{
+      font-size:11.5px;
+      color:var(--text-muted);
+      font-weight:500;
+      margin-top:2px;
+    }
+    .band-seg:hover{background:var(--surface);}
+    .band-seg.active{
+      background:var(--navy);
+      box-shadow:var(--shadow-md);
+    }
+    .band-seg.active .band-seg-name,
+    .band-seg.active .band-seg-range{color:var(--white);}
+    .band-seg.active .band-seg-range{opacity:0.75;}
+
+    /* Period switch */
+    .period-switch{
+      display:inline-flex;
+      align-items:center;
+      gap:14px;
+    }
+    .period-switch-label{
+      font-size:14px;
+      font-weight:500;
+      color:var(--text-muted);
+      transition:color .2s var(--ease);
+    }
+    .period-switch-label.active{color:var(--navy);font-weight:600;}
+    .period-switch-track{
+      position:relative;
+      width:56px;
+      height:30px;
+      background:var(--surface-alt);
+      border:1px solid var(--border);
+      border-radius:var(--radius-full);
+      cursor:pointer;
+      transition:background .25s var(--ease),border-color .25s var(--ease);
+      padding:0;
+    }
+    .period-switch-track::after{
+      content:'';
+      position:absolute;
+      width:22px;
+      height:22px;
+      background:var(--white);
+      border-radius:50%;
+      top:3px;
+      left:3px;
+      box-shadow:var(--shadow-sm);
+      transition:transform .3s cubic-bezier(.16,1,.3,1);
+    }
+    .period-switch.annual .period-switch-track{background:var(--accent);border-color:var(--accent);}
+    .period-switch.annual .period-switch-track::after{transform:translateX(26px);}
+    .period-saving{
+      display:inline-flex;
+      align-items:center;
+      gap:6px;
+      padding:5px 12px;
+      background:var(--accent-glow);
+      color:var(--accent);
+      font-size:12.5px;
+      font-weight:600;
+      border-radius:var(--radius-full);
+      opacity:0;
+      transform:translateX(-4px);
+      transition:opacity .25s var(--ease),transform .3s var(--ease);
+      pointer-events:none;
+    }
+    .period-saving.show{opacity:1;transform:translateX(0);}
+
+    /* Tier cards */
+    .tiers{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:24px;
+      align-items:stretch;
+      max-width:1080px;
+      margin:0 auto;
+    }
+    @media (max-width:880px){.tiers{grid-template-columns:1fr;gap:18px;}}
+
+    .tier{
+      position:relative;
+      background:var(--white);
+      border:1px solid var(--border);
+      border-radius:var(--radius-2xl);
+      padding:40px 36px;
+      display:flex;
+      flex-direction:column;
+      transition:transform .35s cubic-bezier(.16,1,.3,1),box-shadow .35s var(--ease);
+      box-shadow:var(--shadow-sm);
+    }
+    .tier:hover{transform:translateY(-3px);box-shadow:var(--shadow-md);}
+
+    .tier-communicate{
+      border-color:rgba(59,127,234,0.40);
+      background:linear-gradient(180deg,#F4F8FE 0%,var(--white) 30%);
+      box-shadow:var(--shadow-md);
+    }
+    .tier-communicate:hover{box-shadow:var(--shadow-accent);}
+
+    .tier-recommended-tag{
+      position:absolute;
+      top:-14px;
+      left:50%;
+      transform:translateX(-50%);
+      display:inline-flex;
+      align-items:center;
+      gap:7px;
+      padding:6px 14px;
+      background:var(--accent);
+      color:var(--white);
+      font-size:12px;
+      font-weight:700;
+      letter-spacing:0.02em;
+      border-radius:var(--radius-full);
+      box-shadow:var(--shadow-accent);
+    }
+    @media (max-width:880px){.tier{padding:36px 28px;}}
+
+    .tier-header{
+      padding-bottom:28px;
+      border-bottom:1px solid var(--border-light);
+      margin-bottom:28px;
+    }
+    .tier-name{
+      font-family:var(--font-display);
+      font-size:1.7rem;
+      font-weight:600;
+      letter-spacing:-0.02em;
+      color:var(--navy);
+      margin:0 0 6px;
+      line-height:1;
+      font-variation-settings:"opsz" 48;
+    }
+    .tier-tag{
+      font-size:14px;
+      color:var(--text-muted);
+      margin-bottom:24px;
+      line-height:1.5;
+      max-width:36ch;
+    }
+    .tier-price{
+      display:flex;
+      align-items:baseline;
+      gap:6px;
+      margin-bottom:0;
+    }
+    .tier-price .pre{
+      font-size:14px;
+      color:var(--text-muted);
+      font-weight:500;
+      margin-right:4px;
+    }
+    .tier-price .cur{
+      font-family:var(--font-display);
+      font-size:1.6rem;
+      color:var(--navy);
+      font-weight:500;
+      font-variation-settings:"opsz" 36;
+    }
+    .tier-price .amt{
+      font-family:var(--font-display);
+      font-size:3.6rem;
+      font-weight:580;
+      color:var(--navy);
+      letter-spacing:-0.04em;
+      line-height:1;
+      font-variation-settings:"opsz" 96;
+      font-variant-numeric:tabular-nums;
+    }
+    .tier-price .per{
+      font-size:14px;
+      color:var(--text-muted);
+      font-weight:500;
+      margin-left:4px;
+    }
+    .tier-price-trial{
+      margin-top:10px;
+      font-size:13px;
+      color:var(--text-muted);
+      font-weight:500;
+    }
+    .tier-price-trial strong{color:var(--accent);font-weight:600;}
+
+    .tier-features-label{
+      font-size:13px;
+      font-weight:600;
+      letter-spacing:0.02em;
+      color:var(--navy);
+      margin-bottom:16px;
+      text-transform:uppercase;
+    }
+    .tier-features{display:flex;flex-direction:column;gap:14px;}
+    .tier-feat{
+      display:flex;
+      align-items:flex-start;
+      gap:12px;
+      font-size:15px;
+      line-height:1.5;
+      color:var(--text-body);
+    }
+    .tier-feat .ck{
+      flex:0 0 22px;
+      width:22px;
+      height:22px;
+      border-radius:50%;
+      background:var(--accent-glow);
+      color:var(--accent);
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      margin-top:1px;
+    }
+    .tier-feat strong{color:var(--navy);font-weight:600;}
+
+    .tier-cta{margin-top:32px;}
+    .tier-cta .btn{width:100%;justify-content:center;}
+
+    .pricing-note{
+      text-align:center;
+      margin-top:32px;
+      font-size:14px;
+      color:var(--text-muted);
+    }
+    .pricing-note a{color:var(--accent);font-weight:600;border-bottom:1px solid rgba(59,127,234,0.30);}
+
+    /* Enterprise card */
+    .ent{
+      background:linear-gradient(135deg,var(--navy) 0%,var(--navy-mid) 100%);
+      color:var(--white);
+      border-radius:var(--radius-2xl);
+      padding:56px;
+      position:relative;
+      overflow:hidden;
+    }
+    @media (max-width:880px){.ent{padding:40px 28px;}}
+    .ent::before{
+      content:'';
+      position:absolute;
+      top:0;
+      right:0;
+      width:340px;
+      height:340px;
+      background:radial-gradient(circle,rgba(16,185,129,0.22) 0%,transparent 70%);
+      pointer-events:none;
+    }
+    .ent-grid{
+      display:grid;
+      grid-template-columns:1fr 1.3fr;
+      gap:60px;
+      align-items:start;
+      position:relative;
+      z-index:1;
+    }
+    @media (max-width:880px){.ent-grid{grid-template-columns:1fr;gap:32px;}}
+    .ent-tag{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding:6px 13px;
+      background:rgba(16,185,129,0.18);
+      color:#6EE7B7;
+      font-size:12.5px;
+      font-weight:600;
+      border-radius:var(--radius-full);
+      margin-bottom:20px;
+    }
+    .ent-tag .dot{width:6px;height:6px;border-radius:50%;background:#6EE7B7;}
+    .ent h2{color:var(--white);max-width:14ch;margin-bottom:16px;}
+    .ent-lead{
+      font-size:1.05rem;
+      color:rgba(255,255,255,0.78);
+      line-height:1.6;
+      margin-bottom:28px;
+      max-width:42ch;
+    }
+    .ent-meta{
+      display:flex;
+      flex-direction:column;
+      gap:14px;
+      margin-bottom:32px;
+      padding:24px 0;
+      border-top:1px solid rgba(255,255,255,0.10);
+      border-bottom:1px solid rgba(255,255,255,0.10);
+    }
+    .ent-meta-row{display:flex;align-items:center;gap:12px;font-size:14.5px;color:rgba(255,255,255,0.92);}
+    .ent-meta-row svg{color:#6EE7B7;flex-shrink:0;}
+    .ent-meta-row strong{color:var(--white);font-weight:600;}
+
+    .ent-addons-label{
+      font-size:13px;
+      font-weight:600;
+      letter-spacing:0.02em;
+      color:rgba(255,255,255,0.55);
+      margin-bottom:18px;
+      text-transform:uppercase;
+    }
+    .ent-addons{display:grid;grid-template-columns:1fr 1fr;gap:14px 28px;}
+    @media (max-width:560px){.ent-addons{grid-template-columns:1fr;}}
+    .ent-addon{
+      display:flex;
+      align-items:flex-start;
+      gap:10px;
+      font-size:14.5px;
+      line-height:1.45;
+      color:rgba(255,255,255,0.92);
+    }
+    .ent-addon svg{color:#6EE7B7;flex-shrink:0;margin-top:3px;}
+
+    .btn-success{
+      background:var(--success);
+      color:var(--white);
+    }
+    .btn-success:hover{background:#0E9F8E;transform:translateY(-1px);box-shadow:0 12px 28px -8px rgba(16,185,129,0.4);}
   </style>
 </head>
 <body>
 
 <!-- NAV -->
-<nav class="nav" data-dark-hero>
+<nav class="nav">
   <div class="nav-inner">
     <a href="index.html" class="nav-logo"><img src="images/logo.png" alt="Composure" class="nav-logo-img">Composure</a>
     <div class="nav-links">
@@ -164,255 +439,134 @@
 
 <!-- PAGE HERO -->
 <section class="page-hero">
-  <div class="container" style="position:relative;z-index:1;">
-    <div class="eyebrow-tag" style="display:inline-flex;margin-bottom:var(--sp-3);">Transparent pricing</div>
-    <h1>Pricing that scales with your MSP</h1>
-    <p>Simple, transparent pricing based on how many clients you manage. No hidden fees. No per-seat charges. One flat monthly price per band.</p>
-    <div style="display:flex;gap:var(--sp-3);justify-content:center;align-items:center;flex-wrap:wrap;">
-      <span class="security-badge"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>14-day free trial</span>
-      <span class="security-badge"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>No card required to start</span>
-      <span class="security-badge"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>Cancel any time</span>
+  <div class="container" style="position:relative;z-index:1;text-align:center;">
+    <div class="eyebrow-tag" style="margin-bottom:var(--sp-3);">Simple, transparent pricing</div>
+    <h1>Pricing built for the way you actually run your MSP.</h1>
+    <p>Two simple plans. Priced by the number of clients you manage — never by seat, never by message volume. Pick what fits, change it whenever you like.</p>
+    <div class="trust-pillbar">
+      <div class="trust-pillbar-item"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>14-day free trial</div>
+      <span class="sep"></span>
+      <div class="trust-pillbar-item"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>No credit card needed</div>
+      <span class="sep"></span>
+      <div class="trust-pillbar-item"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Cancel any time</div>
+      <span class="sep"></span>
+      <div class="trust-pillbar-item"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>UK / EU data residency</div>
     </div>
   </div>
 </section>
 
-<!-- PRICING MATRIX -->
+<!-- PRICING -->
 <section class="section" aria-labelledby="pricing-heading">
   <div class="container">
 
-    <!-- Monthly / Annual Toggle -->
-    <div class="toggle-wrap" id="pricing-heading">
-      <span class="toggle-label active" id="toggle-monthly">Monthly</span>
-      <label class="toggle-switch">
-        <input type="checkbox" id="pricing-toggle">
-        <div class="toggle-track"></div>
-      </label>
-      <span class="toggle-label" id="toggle-annual">Annual</span>
-      <div class="annual-savings" id="pricing-savings">
-        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>
-        Save 2 months
-      </div>
-    </div>
-    <p style="text-align:center;font-size:var(--text-sm);color:var(--text-muted);margin-bottom:var(--sp-8);">Pay annually — get 2 months free.</p>
+    <div class="pricing-controls">
+      <div class="controls-q" id="pricing-heading">How many clients do you manage?</div>
 
-    <!-- Band Selector -->
-    <div class="band-selector fade-up">
-      <div class="band-selector-label">How many clients do you manage?</div>
-      <div class="band-pills" role="tablist" aria-label="Client count band">
-        <button class="band-pill" data-band="Starter" role="tab" aria-selected="false">1–25</button>
-        <button class="band-pill active" data-band="Growth" role="tab" aria-selected="true">26–100</button>
-        <button class="band-pill" data-band="Scale" role="tab" aria-selected="false">101–500</button>
-        <button class="band-pill" data-band="Enterprise" role="tab" aria-selected="false">500+</button>
+      <div class="band-segments fade-up" id="bands" role="tablist" aria-label="Client volume bands">
+        <button class="band-seg" data-band="Starter" role="tab"><span class="band-seg-name">Starter</span><span class="band-seg-range">1–25 clients</span></button>
+        <button class="band-seg active" data-band="Growth" role="tab" aria-selected="true"><span class="band-seg-name">Growth</span><span class="band-seg-range">26–100 clients</span></button>
+        <button class="band-seg" data-band="Scale" role="tab"><span class="band-seg-name">Scale</span><span class="band-seg-range">101–500 clients</span></button>
+        <button class="band-seg" data-band="Enterprise" role="tab"><span class="band-seg-name">Enterprise</span><span class="band-seg-range">500+ clients</span></button>
+      </div>
+
+      <div class="period-switch" id="period-switch">
+        <span class="period-switch-label active" data-label="monthly">Pay monthly</span>
+        <button class="period-switch-track" id="period-track" aria-label="Toggle billing period"></button>
+        <span class="period-switch-label" data-label="annual">Pay annually</span>
+        <span class="period-saving" id="period-saving">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+          Save 2 months
+        </span>
       </div>
     </div>
 
-    <!-- Bands grid: 4 columns on desktop, filtered by band selector on mobile -->
-    <div class="bands-grid fade-up" id="bands-grid">
-
-      <!-- STARTER -->
-      <div class="band-col" data-band="Starter">
-        <div class="band-col-head">
-          <div class="band-col-name">Starter</div>
-          <div class="band-col-range">1–25 clients</div>
-        </div>
-        <div class="tier-row">
-          <div class="tier-row-head"><span class="tier-name">Respond</span></div>
-          <div class="tier-price">
-            <span class="currency">£</span>
-            <span class="amount" data-tier="Respond" data-monthly="149" data-annual="1788">149</span>
-            <span class="period" data-period>/ month</span>
+    <div class="tiers fade-up">
+      <!-- RESPOND -->
+      <div class="tier tier-respond">
+        <div class="tier-header">
+          <h3 class="tier-name">Respond</h3>
+          <p class="tier-tag">Incident communications, made simple. Keep clients informed when something goes wrong — fast.</p>
+          <div class="tier-price" id="respond-price">
+            <span class="cur">£</span><span class="amt">249</span><span class="per">/ month</span>
           </div>
-          <a href="contact.html#trial" class="btn btn-secondary tier-cta">Start free trial</a>
+          <div class="tier-price-trial"><strong>14 days free</strong> &middot; no card required</div>
         </div>
-        <div class="tier-row communicate">
-          <div class="tier-row-head"><span class="tier-name">Communicate</span><span class="tier-rec-badge">Recommended</span></div>
-          <div class="tier-price">
-            <span class="currency">£</span>
-            <span class="amount" data-tier="Communicate" data-monthly="299" data-annual="3588">299</span>
-            <span class="period" data-period>/ month</span>
-          </div>
-          <a href="contact.html#trial" class="btn btn-primary tier-cta">Start free trial</a>
+        <div class="tier-features-label">What you get</div>
+        <div class="tier-features">
+          <div class="tier-feat"><span class="ck"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>P0 / P1 incident communications</div>
+          <div class="tier-feat"><span class="ck"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>Email + SMS delivery, all in one place</div>
+          <div class="tier-feat"><span class="ck"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>AI-drafted updates, ready to review &amp; send</div>
+          <div class="tier-feat"><span class="ck"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>Branded client status page</div>
+          <div class="tier-feat"><span class="ck"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>Post-incident reports with approval workflow</div>
+          <div class="tier-feat"><span class="ck"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>iPhone app for approvals on the go</div>
+          <div class="tier-feat"><span class="ck"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>Standard support</div>
         </div>
-        <p style="font-size:11px;color:var(--text-subtle);margin-top:var(--sp-3);text-align:center;">14-day free trial — no credit card required</p>
+        <div class="tier-cta">
+          <a href="contact.html#trial" class="btn btn-secondary">Start free trial</a>
+        </div>
       </div>
 
-      <!-- GROWTH (default) -->
-      <div class="band-col highlight show" data-band="Growth">
-        <div class="band-col-head">
-          <div class="band-col-name">Growth</div>
-          <div class="band-col-range">26–100 clients</div>
-        </div>
-        <div class="tier-row">
-          <div class="tier-row-head"><span class="tier-name">Respond</span></div>
-          <div class="tier-price">
-            <span class="currency">£</span>
-            <span class="amount" data-tier="Respond" data-monthly="249" data-annual="2988">249</span>
-            <span class="period" data-period>/ month</span>
+      <!-- COMMUNICATE -->
+      <div class="tier tier-communicate">
+        <span class="tier-recommended-tag">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15 8.5 22 9.5 17 14.5 18 22 12 18 6 22 7 14.5 2 9.5 9 8.5 12 2"/></svg>
+          Most popular
+        </span>
+        <div class="tier-header">
+          <h3 class="tier-name">Communicate</h3>
+          <p class="tier-tag">The full platform. Everything in Respond, plus general comms, white-label branding and analytics.</p>
+          <div class="tier-price" id="communicate-price">
+            <span class="cur">£</span><span class="amt">499</span><span class="per">/ month</span>
           </div>
-          <a href="contact.html#trial" class="btn btn-secondary tier-cta">Start free trial</a>
+          <div class="tier-price-trial"><strong>14 days free</strong> &middot; no card required</div>
         </div>
-        <div class="tier-row communicate">
-          <div class="tier-row-head"><span class="tier-name">Communicate</span><span class="tier-rec-badge">Recommended</span></div>
-          <div class="tier-price">
-            <span class="currency">£</span>
-            <span class="amount" data-tier="Communicate" data-monthly="499" data-annual="5988">499</span>
-            <span class="period" data-period>/ month</span>
-          </div>
-          <a href="contact.html#trial" class="btn btn-primary tier-cta">Start free trial</a>
+        <div class="tier-features-label">Everything in Respond, plus</div>
+        <div class="tier-features">
+          <div class="tier-feat"><span class="ck"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>General communications &amp; planned maintenance</div>
+          <div class="tier-feat"><span class="ck"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>Templates library with personalisation</div>
+          <div class="tier-feat"><span class="ck"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>AM / CSM auto-included on every comm</div>
+          <div class="tier-feat"><span class="ck"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span><strong>White-label branding</strong> — ship under your own brand</div>
+          <div class="tier-feat"><span class="ck"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>Advanced analytics &amp; reporting</div>
+          <div class="tier-feat"><span class="ck"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>Priority support &amp; onboarding</div>
         </div>
-        <p style="font-size:11px;color:var(--text-subtle);margin-top:var(--sp-3);text-align:center;">14-day free trial — no credit card required</p>
+        <div class="tier-cta">
+          <a href="contact.html#trial" class="btn btn-primary">Start free trial</a>
+        </div>
       </div>
-
-      <!-- SCALE -->
-      <div class="band-col" data-band="Scale">
-        <div class="band-col-head">
-          <div class="band-col-name">Scale</div>
-          <div class="band-col-range">101–500 clients</div>
-        </div>
-        <div class="tier-row">
-          <div class="tier-row-head"><span class="tier-name">Respond</span></div>
-          <div class="tier-price">
-            <span class="currency">£</span>
-            <span class="amount" data-tier="Respond" data-monthly="399" data-annual="4788">399</span>
-            <span class="period" data-period>/ month</span>
-          </div>
-          <a href="contact.html#trial" class="btn btn-secondary tier-cta">Start free trial</a>
-        </div>
-        <div class="tier-row communicate">
-          <div class="tier-row-head"><span class="tier-name">Communicate</span><span class="tier-rec-badge">Recommended</span></div>
-          <div class="tier-price">
-            <span class="currency">£</span>
-            <span class="amount" data-tier="Communicate" data-monthly="899" data-annual="10788">899</span>
-            <span class="period" data-period>/ month</span>
-          </div>
-          <a href="contact.html#trial" class="btn btn-primary tier-cta">Start free trial</a>
-        </div>
-        <p style="font-size:11px;color:var(--text-subtle);margin-top:var(--sp-3);text-align:center;">14-day free trial — no credit card required</p>
-      </div>
-
-      <!-- ENTERPRISE -->
-      <div class="band-col enterprise" data-band="Enterprise">
-        <div class="band-badge">Enterprise</div>
-        <div class="band-col-head">
-          <div class="band-col-name">Enterprise</div>
-          <div class="band-col-range">500+ clients</div>
-        </div>
-        <div class="tier-row">
-          <div class="tier-row-head"><span class="tier-name">Respond</span></div>
-          <div class="tier-price contact">
-            <span class="amount">Contact us</span>
-          </div>
-          <a href="contact.html#contact" class="btn btn-secondary tier-cta">Contact us</a>
-        </div>
-        <div class="tier-row communicate">
-          <div class="tier-row-head"><span class="tier-name">Communicate</span><span class="tier-rec-badge" style="color:var(--success);background:rgba(16,185,129,0.12);">Bespoke</span></div>
-          <div class="tier-price">
-            <span class="amount" style="font-size:var(--text-sm);font-weight:600;color:var(--text-muted);margin-right:6px;">From</span>
-            <span class="currency">£</span>
-            <span class="amount">1,500</span>
-            <span class="period">/ month</span>
-          </div>
-          <a href="contact.html#contact" class="btn btn-primary tier-cta">Book a call</a>
-        </div>
-        <p style="font-size:11px;color:var(--text-subtle);margin-top:var(--sp-3);text-align:center;">Bespoke contract — most live within 2 weeks</p>
-      </div>
-
     </div>
 
-    <p style="text-align:center;font-size:var(--text-xs);color:var(--text-subtle);margin-top:var(--sp-6);">All prices ex-VAT. Annual billing equals 10× monthly for 12 months access.</p>
+    <p class="pricing-note">Need to talk numbers? <a href="contact.html">Book a 20-minute call</a> and we'll walk through it together.</p>
   </div>
 </section>
 
-<!-- WHAT'S INCLUDED -->
-<section class="section section-alt" aria-labelledby="included-heading">
+<!-- ENTERPRISE -->
+<section class="section" style="padding-top:0;">
   <div class="container">
-    <div class="section-header fade-up">
-      <div class="eyebrow-tag">What's included</div>
-      <h2 id="included-heading">Two tiers — pick one</h2>
-      <p>Every band (Starter, Growth, Scale, Enterprise) lets you choose between <strong>Respond</strong> or <strong>Communicate</strong>. Same platform, different scope. Communicate is the full product, including white label branding.</p>
-    </div>
-
-    <div class="included-grid fade-up">
-      <!-- Respond -->
-      <div class="included-card respond">
-        <div class="included-bar"></div>
-        <div class="included-card-head">
-          <span class="included-card-tier">Entry tier</span>
-          <div class="included-card-name">Respond</div>
-          <div class="included-card-price"><span class="from">From</span><span class="amount">£149</span><span class="period">/ month</span></div>
-          <p class="included-card-tagline">P0/P1 incident communications, fast — for MSPs who need to stop the silence during major events.</p>
-        </div>
-        <div class="included-card-body">
-          <div class="included-list-label">What you get</div>
-          <div class="included-list">
-            <div class="pricing-feature"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>P0/P1 incident communications</div>
-            <div class="pricing-feature"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>Multi-channel send (email + SMS)</div>
-            <div class="pricing-feature"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>Client status page</div>
-            <div class="pricing-feature"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>Post-incident report with approval workflow</div>
-            <div class="pricing-feature"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>iPhone app — push, approvals, update submissions</div>
-            <div class="pricing-feature"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>14-day free trial</div>
-          </div>
-          <div class="included-card-foot">
-            <a href="contact.html#trial" class="btn btn-secondary">Start free trial</a>
-          </div>
-        </div>
-      </div>
-
-      <!-- Communicate -->
-      <div class="included-card communicate">
-        <div class="included-bar"></div>
-        <div class="included-card-recommended">Recommended</div>
-        <div class="included-card-head">
-          <span class="included-card-tier">Full platform</span>
-          <div class="included-card-name">Communicate</div>
-          <div class="included-card-price"><span class="from">From</span><span class="amount">£299</span><span class="period">/ month</span></div>
-          <p class="included-card-tagline">Every Composure feature, including white label branding — the full platform for professionalising every client interaction.</p>
-        </div>
-        <div class="included-card-body">
-          <div class="included-list-label">Everything in Respond, plus</div>
-          <div class="included-list">
-            <div class="pricing-feature"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>General communications module</div>
-            <div class="pricing-feature"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>Templates library with personalisation</div>
-            <div class="pricing-feature"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>AM/CSM auto-inclusion on all comms</div>
-            <div class="pricing-feature"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg><strong>White label branding</strong> — badge as your own</div>
-            <div class="pricing-feature"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>Advanced analytics &amp; reporting</div>
-            <div class="pricing-feature"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>Priority support</div>
-          </div>
-          <div class="included-card-foot">
-            <a href="contact.html#trial" class="btn btn-primary">Start free trial</a>
-          </div>
-        </div>
-      </div>
-
-    </div>
-
-    <!-- Enterprise band add-ons -->
-    <div class="enterprise-addons fade-up">
-      <div class="enterprise-addons-grid">
+    <div class="ent fade-up">
+      <div class="ent-grid">
         <div>
-          <span class="enterprise-addons-label">Enterprise band — 500+ clients</span>
-          <h3>Need more? Add the Enterprise package.</h3>
-          <p>If you manage 500+ clients or need a contracted SLA, SSO, or a dedicated CSM, we'll wrap a bespoke package around your chosen tier. Most Enterprise customers are live within 2 weeks.</p>
-          <div class="enterprise-addons-meta">
-            <div><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>From £1,500/month on Communicate</div>
-            <div><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>Bespoke contract terms</div>
-            <div><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>Live within 2 weeks</div>
+          <div class="ent-tag"><span class="dot"></span>For 500+ clients</div>
+          <h2>Enterprise — built around how you work.</h2>
+          <p class="ent-lead">If you're running 500+ clients or need contracted SLAs, SSO and a dedicated CSM, we'll wrap a bespoke package around your chosen tier. Most Enterprise customers are live within two weeks.</p>
+          <div class="ent-meta">
+            <div class="ent-meta-row"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg><span><strong>From £1,500/month</strong> on Communicate</span></div>
+            <div class="ent-meta-row"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg><span>Bespoke contract terms</span></div>
+            <div class="ent-meta-row"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg><span>Live within 2 weeks</span></div>
+            <div class="ent-meta-row"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg><span>Quarterly business reviews included</span></div>
           </div>
-          <div class="enterprise-addons-cta">
-            <a href="contact.html" class="btn" style="background:var(--success);color:var(--white);">Book a call →</a>
-          </div>
+          <a href="contact.html" class="btn btn-success">Book a call</a>
         </div>
         <div>
-          <div class="included-list-label" style="color:rgba(255,255,255,0.55);margin-bottom:var(--sp-4);">Enterprise adds on top</div>
-          <div class="enterprise-addons-list">
-            <div class="addon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>Dedicated Customer Success Manager</div>
-            <div class="addon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>Contracted SLA on platform uptime</div>
-            <div class="addon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>SSO / SAML integration</div>
-            <div class="addon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>Custom onboarding &amp; playbook config</div>
-            <div class="addon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>API access</div>
-            <div class="addon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>Quarterly Business Reviews</div>
-            <div class="addon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>Multi-entity / group MSP support</div>
-            <div class="addon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>Bespoke contract terms</div>
+          <div class="ent-addons-label">What's added on top</div>
+          <div class="ent-addons">
+            <div class="ent-addon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Dedicated Customer Success Manager</div>
+            <div class="ent-addon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Contracted SLA on platform uptime</div>
+            <div class="ent-addon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>SSO / SAML integration</div>
+            <div class="ent-addon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Custom onboarding &amp; playbook config</div>
+            <div class="ent-addon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>API access</div>
+            <div class="ent-addon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Quarterly Business Reviews</div>
+            <div class="ent-addon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Multi-entity / group MSP support</div>
+            <div class="ent-addon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Bespoke contract terms</div>
           </div>
         </div>
       </div>
@@ -420,83 +574,83 @@
   </div>
 </section>
 
-<!-- FEATURE COMPARISON TABLE -->
-<section class="section" aria-labelledby="comparison-table-heading">
+<!-- COMPARISON -->
+<section class="section section-alt">
   <div class="container">
     <div class="section-header fade-up">
-      <div class="eyebrow-tag">Feature comparison</div>
-      <h2 id="comparison-table-heading">Respond vs Communicate</h2>
-      <p>Same platform, different scope. Communicate adds general comms, white label, and priority support to everything in Respond.</p>
+      <div class="eyebrow-tag">Side-by-side</div>
+      <h2>Compare what's in each plan.</h2>
+      <p>Same platform — Communicate just opens up the rest of it. Move between plans whenever you like.</p>
     </div>
+    <div class="fade-up" style="overflow-x:auto;">
+      <table class="comparison-table" style="min-width:680px;">
+        <thead>
+          <tr>
+            <th>Feature</th>
+            <th>Respond</th>
+            <th class="table-header-composure">Communicate<br><span style="font-size:var(--text-xs);font-weight:500;opacity:0.85;">Most popular</span></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td colspan="3" style="background:var(--surface);font-size:var(--text-xs);font-weight:700;letter-spacing:0.06em;text-transform:uppercase;color:var(--text-subtle);padding:var(--sp-3) var(--sp-6);">Incident communication</td></tr>
+          <tr><td>P0 and P1 incident communications</td><td><svg class="icon-check" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></td><td class="col-composure"><svg class="icon-check" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></td></tr>
+          <tr><td>AI-drafted stakeholder messaging</td><td><svg class="icon-check" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></td><td class="col-composure"><svg class="icon-check" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></td></tr>
+          <tr><td>Per-contact preview &amp; editing</td><td><svg class="icon-check" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></td><td class="col-composure"><svg class="icon-check" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></td></tr>
+          <tr><td>Scheduled holding updates</td><td><svg class="icon-check" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></td><td class="col-composure"><svg class="icon-check" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></td></tr>
+          <tr><td>Post-incident report &amp; approval workflow</td><td><svg class="icon-check" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></td><td class="col-composure"><svg class="icon-check" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></td></tr>
 
-    <div class="comparison-section fade-up">
-      <div class="comparison-wrapper">
-        <table class="comparison-table">
-          <thead>
-            <tr>
-              <th>Feature</th>
-              <th>Respond</th>
-              <th class="table-header-composure">Communicate<br><span style="font-size:var(--text-xs);font-weight:500;opacity:0.8;">Recommended</span></th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr><td colspan="3" style="background:var(--surface);font-size:var(--text-xs);font-weight:700;letter-spacing:0.06em;text-transform:uppercase;color:var(--text-subtle);padding:var(--sp-3) var(--sp-6);">Incident Communication</td></tr>
-            <tr><td>P0 and P1 incident communications</td><td><svg class="icon-check" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></td><td class="col-composure"><svg class="icon-check" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></td></tr>
-            <tr><td>AI-generated stakeholder messaging</td><td><svg class="icon-check" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></td><td class="col-composure"><svg class="icon-check" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></td></tr>
-            <tr><td>Per-contact preview and editing</td><td><svg class="icon-check" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></td><td class="col-composure"><svg class="icon-check" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></td></tr>
-            <tr><td>Scheduled holding updates</td><td><svg class="icon-check" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></td><td class="col-composure"><svg class="icon-check" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></td></tr>
-            <tr><td>Post-incident report with approval workflow</td><td><svg class="icon-check" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></td><td class="col-composure"><svg class="icon-check" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></td></tr>
-            <tr><td colspan="3" style="background:var(--surface);font-size:var(--text-xs);font-weight:700;letter-spacing:0.06em;text-transform:uppercase;color:var(--text-subtle);padding:var(--sp-3) var(--sp-6);">Delivery &amp; Channels</td></tr>
-            <tr><td>Email + SMS delivery</td><td><svg class="icon-check" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></td><td class="col-composure"><svg class="icon-check" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></td></tr>
-            <tr><td>Client status page</td><td><svg class="icon-check" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></td><td class="col-composure"><svg class="icon-check" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></td></tr>
-            <tr><td>iPhone app (push, approvals, submissions)</td><td><svg class="icon-check" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></td><td class="col-composure"><svg class="icon-check" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></td></tr>
-            <tr><td colspan="3" style="background:var(--surface);font-size:var(--text-xs);font-weight:700;letter-spacing:0.06em;text-transform:uppercase;color:var(--text-subtle);padding:var(--sp-3) var(--sp-6);">Planned &amp; General Communications</td></tr>
-            <tr><td>General communications module</td><td style="color:var(--text-subtle);">—</td><td class="col-composure"><svg class="icon-check" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></td></tr>
-            <tr><td>Planned maintenance workflows</td><td style="color:var(--text-subtle);">—</td><td class="col-composure"><svg class="icon-check" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></td></tr>
-            <tr><td>Templates library with personalisation</td><td style="color:var(--text-subtle);">—</td><td class="col-composure"><svg class="icon-check" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></td></tr>
-            <tr><td>AM/CSM auto-inclusion</td><td style="color:var(--text-subtle);">—</td><td class="col-composure"><svg class="icon-check" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></td></tr>
-            <tr><td colspan="3" style="background:var(--surface);font-size:var(--text-xs);font-weight:700;letter-spacing:0.06em;text-transform:uppercase;color:var(--text-subtle);padding:var(--sp-3) var(--sp-6);">Branding, Analytics &amp; Support</td></tr>
-            <tr><td>White-label branding</td><td style="color:var(--text-subtle);">—</td><td class="col-composure"><svg class="icon-check" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></td></tr>
-            <tr><td>Advanced analytics and reporting</td><td style="color:var(--text-subtle);">—</td><td class="col-composure"><svg class="icon-check" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></td></tr>
-            <tr><td>Support level</td><td style="color:var(--text-subtle);">Standard</td><td class="col-composure">Priority</td></tr>
-          </tbody>
-        </table>
-      </div>
+          <tr><td colspan="3" style="background:var(--surface);font-size:var(--text-xs);font-weight:700;letter-spacing:0.06em;text-transform:uppercase;color:var(--text-subtle);padding:var(--sp-3) var(--sp-6);">Delivery &amp; channels</td></tr>
+          <tr><td>Email + SMS delivery</td><td><svg class="icon-check" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></td><td class="col-composure"><svg class="icon-check" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></td></tr>
+          <tr><td>Branded client status page</td><td><svg class="icon-check" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></td><td class="col-composure"><svg class="icon-check" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></td></tr>
+          <tr><td>iPhone app (push, approvals, submissions)</td><td><svg class="icon-check" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></td><td class="col-composure"><svg class="icon-check" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></td></tr>
+
+          <tr><td colspan="3" style="background:var(--surface);font-size:var(--text-xs);font-weight:700;letter-spacing:0.06em;text-transform:uppercase;color:var(--text-subtle);padding:var(--sp-3) var(--sp-6);">Planned &amp; general communications</td></tr>
+          <tr><td>General communications module</td><td style="color:var(--text-subtle);">—</td><td class="col-composure"><svg class="icon-check" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></td></tr>
+          <tr><td>Planned maintenance workflows</td><td style="color:var(--text-subtle);">—</td><td class="col-composure"><svg class="icon-check" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></td></tr>
+          <tr><td>Templates library with personalisation</td><td style="color:var(--text-subtle);">—</td><td class="col-composure"><svg class="icon-check" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></td></tr>
+          <tr><td>AM / CSM auto-inclusion</td><td style="color:var(--text-subtle);">—</td><td class="col-composure"><svg class="icon-check" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></td></tr>
+
+          <tr><td colspan="3" style="background:var(--surface);font-size:var(--text-xs);font-weight:700;letter-spacing:0.06em;text-transform:uppercase;color:var(--text-subtle);padding:var(--sp-3) var(--sp-6);">Branding, analytics &amp; support</td></tr>
+          <tr><td>White-label branding</td><td style="color:var(--text-subtle);">—</td><td class="col-composure"><svg class="icon-check" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></td></tr>
+          <tr><td>Advanced analytics &amp; reporting</td><td style="color:var(--text-subtle);">—</td><td class="col-composure"><svg class="icon-check" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></td></tr>
+          <tr><td>Support level</td><td style="color:var(--text-subtle);">Standard</td><td class="col-composure">Priority</td></tr>
+        </tbody>
+      </table>
     </div>
   </div>
 </section>
 
 <!-- FAQ -->
-<section class="section section-alt">
+<section class="section">
   <div class="container-narrow">
     <div class="section-header fade-up">
-      <div class="eyebrow-tag">Pricing FAQ</div>
-      <h2>Questions about pricing</h2>
+      <div class="eyebrow-tag">FAQ</div>
+      <h2>Common questions, answered.</h2>
     </div>
     <div class="faq-list fade-up">
       <div class="faq-item">
-        <button class="faq-question">How do you count clients?<div class="faq-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></div></button>
-        <div class="faq-answer"><div class="faq-answer-inner">A client is any end-customer organisation you manage communications for inside Composure. You can update your band at any time — we'll prorate the difference.</div></div>
+        <button class="faq-question">How exactly do you count clients?<div class="faq-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></div></button>
+        <div class="faq-answer"><div class="faq-answer-inner">A "client" is any end-customer organisation you manage communications for inside Composure. Move bands whenever your numbers change — we'll prorate the difference. We don't audit message volumes or seat counts.</div></div>
       </div>
       <div class="faq-item">
-        <button class="faq-question">Can I start on Respond and upgrade to Communicate later?<div class="faq-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></div></button>
-        <div class="faq-answer"><div class="faq-answer-inner">Yes. You can upgrade at any time and we'll prorate the cost. Most MSPs move to Communicate within the first 60 days once they see the full platform.</div></div>
+        <button class="faq-question">Can I start on Respond and upgrade later?<div class="faq-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></div></button>
+        <div class="faq-answer"><div class="faq-answer-inner">Absolutely. You can upgrade at any time and we'll prorate the cost. Most MSPs end up moving to Communicate within the first 60 days once they see the full platform in action.</div></div>
       </div>
       <div class="faq-item">
         <button class="faq-question">Is there a setup fee?<div class="faq-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></div></button>
-        <div class="faq-answer"><div class="faq-answer-inner">No. All plans include onboarding. Enterprise customers receive dedicated onboarding support as part of their package.</div></div>
+        <div class="faq-answer"><div class="faq-answer-inner">No setup fees. Onboarding is included on every plan. Enterprise customers get dedicated onboarding and playbook configuration as part of their package.</div></div>
       </div>
       <div class="faq-item">
-        <button class="faq-question">What happens at the end of my free trial?<div class="faq-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></div></button>
-        <div class="faq-answer"><div class="faq-answer-inner">You'll be prompted to enter payment details. We don't charge you until you choose a plan. If you do nothing, your account pauses — your data is retained for 30 days.</div></div>
+        <button class="faq-question">What happens after my free trial?<div class="faq-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></div></button>
+        <div class="faq-answer"><div class="faq-answer-inner">You'll be invited to add payment details. We don't charge until you choose a plan. If you do nothing, your account simply pauses — your data is retained for 30 days, then exported and removed on request.</div></div>
       </div>
       <div class="faq-item">
-        <button class="faq-question">Do you offer discounts for longer contracts?<div class="faq-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></div></button>
-        <div class="faq-answer"><div class="faq-answer-inner">Annual billing gives you 2 months free. For multi-year Enterprise contracts, speak to us directly.</div></div>
+        <button class="faq-question">Do you offer annual or multi-year discounts?<div class="faq-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></div></button>
+        <div class="faq-answer"><div class="faq-answer-inner">Pay annually and you get two months free (10× monthly = a full year of access). For multi-year Enterprise contracts, get in touch and we'll structure terms that fit.</div></div>
       </div>
       <div class="faq-item">
-        <button class="faq-question">Is white label included?<div class="faq-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></div></button>
-        <div class="faq-answer"><div class="faq-answer-inner">Yes — white label branding is included in all Communicate plans, including Starter. There is no separate Platform tier.</div></div>
+        <button class="faq-question">Is white-label branding really included on Communicate?<div class="faq-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></div></button>
+        <div class="faq-answer"><div class="faq-answer-inner">Yes — white-label branding is included on every Communicate plan, from Starter through Enterprise. There's no separate "Platform" tier. If you can pay £299/month, you can ship under your own brand.</div></div>
       </div>
     </div>
   </div>
@@ -524,71 +678,75 @@
       <div><div class="footer-col-title">Company</div><div class="footer-links"><a href="about.html" class="footer-link">About</a><a href="contact.html" class="footer-link">Contact</a><a href="resources.html" class="footer-link">Resources</a></div></div>
       <div><div class="footer-col-title">Legal</div><div class="footer-links"><a href="#" class="footer-link">Privacy Policy</a><a href="#" class="footer-link">Terms of Service</a><a href="#" class="footer-link">Cookie Policy</a></div></div>
     </div>
-    <div class="footer-bottom"><div class="footer-bottom-left">&copy; 2025 Composure. All rights reserved.</div><div class="footer-bottom-links"><a href="#" class="footer-bottom-link">Privacy</a><a href="#" class="footer-bottom-link">Terms</a><a href="#" class="footer-bottom-link">Cookies</a></div></div>
+    <div class="footer-bottom"><div class="footer-bottom-left">&copy; 2026 Composure. All rights reserved.</div><div class="footer-bottom-links"><a href="#" class="footer-bottom-link">Privacy</a><a href="#" class="footer-bottom-link">Terms</a><a href="#" class="footer-bottom-link">Cookies</a></div></div>
   </div>
 </footer>
 
 <script src="js/main.js"></script>
 <script>
 (function(){
-  // Monthly / Annual toggle
-  var toggle = document.getElementById('pricing-toggle');
-  var monthlyLabel = document.getElementById('toggle-monthly');
-  var annualLabel  = document.getElementById('toggle-annual');
-  var savingsBadge = document.getElementById('pricing-savings');
-  var amounts = document.querySelectorAll('.amount[data-monthly]');
-  var periods = document.querySelectorAll('[data-period]');
+  /* Pricing data table */
+  var prices = {
+    Starter:    { respond:{m:149,a:1788}, communicate:{m:299,a:3588} },
+    Growth:     { respond:{m:249,a:2988}, communicate:{m:499,a:5988} },
+    Scale:      { respond:{m:399,a:4788}, communicate:{m:899,a:10788} },
+    Enterprise: { respond:null,            communicate:{m:1500,a:18000} }
+  };
 
+  var state = { band:'Growth', period:'monthly' };
   function fmt(n){ return n.toLocaleString('en-GB'); }
 
-  function applyPeriod(annual){
-    monthlyLabel.classList.toggle('active', !annual);
-    annualLabel.classList.toggle('active', annual);
-    savingsBadge.classList.toggle('show', annual);
-    amounts.forEach(function(el){
-      var v = annual ? el.dataset.annual : el.dataset.monthly;
-      if(v) el.textContent = fmt(parseInt(v,10));
-    });
-    periods.forEach(function(el){ el.textContent = annual ? '/ year' : '/ month'; });
+  function renderTier(elId, tier){
+    var el = document.getElementById(elId);
+    if(!el) return;
+    var data = prices[state.band][tier];
+    if(!data){
+      el.innerHTML = '<span class="amt" style="font-size:2rem;font-weight:580;color:var(--navy);letter-spacing:-0.02em;">Contact us</span>';
+      return;
+    }
+    var v = state.period === 'annual' ? data.a : data.m;
+    var per = state.period === 'annual' ? '/ year' : '/ month';
+    var pre = state.band === 'Enterprise' ? '<span class="pre">From</span>' : '';
+    el.innerHTML = pre + '<span class="cur">£</span><span class="amt">'+fmt(v)+'</span><span class="per">'+per+'</span>';
   }
 
-  if (toggle){
-    toggle.addEventListener('change', function(){ applyPeriod(this.checked); });
+  function render(){
+    renderTier('respond-price','respond');
+    renderTier('communicate-price','communicate');
   }
 
-  // Band selector — defaults to Growth
-  var pills = document.querySelectorAll('.band-pill');
-  var bandCols = document.querySelectorAll('.band-col');
-  var isMobile = function(){ return window.matchMedia('(max-width: 640px)').matches; };
-
-  function selectBand(band){
-    pills.forEach(function(p){
-      var on = p.dataset.band === band;
-      p.classList.toggle('active', on);
-      p.setAttribute('aria-selected', on ? 'true' : 'false');
-    });
-    bandCols.forEach(function(c){
-      var on = c.dataset.band === band;
-      c.classList.toggle('show', on);
-      c.classList.toggle('highlight', on);
-    });
-  }
-
-  pills.forEach(function(p){
-    p.addEventListener('click', function(){ selectBand(this.dataset.band); });
-  });
-
-  // Clicking a non-active column also selects that band (mobile keeps stacked behaviour)
-  bandCols.forEach(function(c){
-    c.addEventListener('click', function(e){
-      if (e.target.closest('a, button')) return; // let CTAs work normally
-      if (this.classList.contains('highlight')) return;
-      selectBand(this.dataset.band);
+  /* Band selector */
+  var segs = document.querySelectorAll('.band-seg');
+  segs.forEach(function(s){
+    s.addEventListener('click', function(){
+      segs.forEach(function(x){ x.classList.remove('active'); x.removeAttribute('aria-selected'); });
+      this.classList.add('active');
+      this.setAttribute('aria-selected','true');
+      state.band = this.dataset.band;
+      render();
     });
   });
 
-  // Initialise on Growth
-  selectBand('Growth');
+  /* Period switch */
+  var pswitch = document.getElementById('period-switch');
+  var ptrack = document.getElementById('period-track');
+  var saving = document.getElementById('period-saving');
+  var labels = document.querySelectorAll('.period-switch-label');
+  function setPeriod(period){
+    state.period = period;
+    pswitch.classList.toggle('annual', period==='annual');
+    labels.forEach(function(l){ l.classList.toggle('active', l.dataset.label === period); });
+    if(saving) saving.classList.toggle('show', period === 'annual');
+    render();
+  }
+  ptrack.addEventListener('click', function(){
+    setPeriod(state.period === 'monthly' ? 'annual' : 'monthly');
+  });
+  labels.forEach(function(l){
+    l.addEventListener('click', function(){ setPeriod(this.dataset.label); });
+  });
+
+  render();
 })();
 </script>
 </body>
