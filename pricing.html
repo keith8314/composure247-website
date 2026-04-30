@@ -405,6 +405,200 @@
       color:var(--white);
     }
     .btn-success:hover{background:#0E9F8E;transform:translateY(-1px);box-shadow:0 12px 28px -8px rgba(16,185,129,0.4);}
+
+    /* Business case — per-column layout with subgrid row alignment */
+    .case-compare{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      grid-template-rows:auto repeat(5,auto) auto;
+      max-width:1080px;
+      margin:0 auto 56px;
+      border:1px solid var(--border);
+      border-radius:var(--radius-2xl);
+      overflow:hidden;
+      box-shadow:var(--shadow-sm);
+      background:var(--white);
+    }
+    .case-col{
+      display:grid;
+      grid-template-rows:subgrid;
+      grid-row:1 / -1;
+      background:var(--white);
+    }
+    .case-col-without{background:var(--surface);}
+    .case-col-with{
+      background:linear-gradient(180deg,#F4F8FE 0%,var(--white) 70%);
+      border-left:1px solid var(--border);
+    }
+    @media (max-width:880px){
+      .case-compare{grid-template-columns:1fr;grid-template-rows:auto;}
+      .case-col{display:flex;flex-direction:column;grid-row:auto;}
+      .case-col-with{border-left:none;border-top:1px solid var(--border);}
+    }
+
+    /* Header */
+    .case-col-head{
+      padding:24px 28px 22px;
+      border-bottom:1px solid var(--border);
+    }
+    .case-col-without .case-col-head{background:var(--surface-alt);}
+    .case-col-with .case-col-head{
+      background:rgba(59,127,234,0.08);
+      border-bottom-color:rgba(59,127,234,0.18);
+    }
+    .case-col-eyebrow{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      font-size:11px;
+      font-weight:700;
+      letter-spacing:0.10em;
+      text-transform:uppercase;
+      color:var(--text-muted);
+      margin-bottom:6px;
+    }
+    .case-col-eyebrow::before{
+      content:'';
+      width:6px;height:6px;border-radius:50%;
+      background:var(--text-subtle);
+    }
+    .case-col-with .case-col-eyebrow{color:var(--accent);}
+    .case-col-with .case-col-eyebrow::before{background:var(--accent);}
+    .case-col-title{
+      font-family:var(--font-display);
+      font-size:1.25rem;
+      font-weight:600;
+      letter-spacing:-0.015em;
+      color:var(--navy);
+      font-variation-settings:"opsz" 36;
+      line-height:1.15;
+    }
+
+    /* Body row */
+    .case-row{
+      display:grid;
+      grid-template-columns:130px 1fr;
+      gap:18px;
+      padding:18px 28px;
+      border-bottom:1px solid var(--border);
+      font-size:14.5px;
+      line-height:1.5;
+      align-items:flex-start;
+    }
+    .case-row-label{
+      font-size:10.5px;
+      font-weight:700;
+      letter-spacing:0.10em;
+      color:var(--text-muted);
+      text-transform:uppercase;
+      padding-top:3px;
+    }
+    .case-row-value{color:var(--text-body);}
+    .case-col-with .case-row-value{color:var(--navy);}
+    .case-row-value strong{color:var(--navy);font-weight:600;}
+    .case-col-with .case-row-value strong{color:var(--accent);}
+    .case-sub{
+      display:block;
+      font-size:13px;
+      color:var(--text-muted);
+      margin-top:4px;
+    }
+
+    /* Footer — savings in GREEN */
+    .case-foot{
+      padding:28px;
+      background:var(--surface-alt);
+      display:flex;
+      flex-direction:column;
+      gap:6px;
+    }
+    .case-col-with .case-foot{
+      background:linear-gradient(180deg,rgba(16,185,129,0.16) 0%,rgba(16,185,129,0.04) 100%);
+      border-top:2px solid var(--success);
+    }
+    .case-foot-label{
+      font-size:11px;
+      font-weight:700;
+      letter-spacing:0.10em;
+      text-transform:uppercase;
+      color:var(--text-muted);
+    }
+    .case-col-with .case-foot-label{color:var(--success);}
+    .case-foot-value{
+      font-family:var(--font-display);
+      font-size:clamp(2rem,3.6vw,3rem);
+      font-weight:580;
+      letter-spacing:-0.035em;
+      color:var(--navy);
+      line-height:1;
+      font-variation-settings:"opsz" 96;
+    }
+    .case-col-with .case-foot-value{color:var(--success);}
+    .case-foot-sub{
+      font-size:13px;
+      color:var(--text-muted);
+      margin-top:6px;
+      line-height:1.5;
+    }
+    .case-col-with .case-foot-sub strong{color:var(--success);font-weight:600;}
+
+    /* Testimonials */
+    .bc-quotes{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:20px;
+      max-width:1080px;
+      margin:0 auto;
+    }
+    @media (max-width:880px){.bc-quotes{grid-template-columns:1fr;}}
+    .bc-quote{
+      background:var(--white);
+      border:1px solid var(--border);
+      border-radius:var(--radius-xl);
+      padding:32px;
+      padding-left:36px;
+      position:relative;
+      overflow:hidden;
+    }
+    .bc-quote::before{
+      content:'';
+      position:absolute;
+      left:0;
+      top:0;
+      bottom:0;
+      width:3px;
+      background:var(--accent);
+    }
+    .bc-quote::after{
+      content:'\201C';
+      position:absolute;
+      top:8px;
+      right:22px;
+      font-family:var(--font-display);
+      font-size:5.5rem;
+      line-height:1;
+      color:var(--accent-glow);
+      font-weight:600;
+      pointer-events:none;
+    }
+    .bc-quote blockquote{
+      font-family:var(--font-display);
+      font-size:1.15rem;
+      font-weight:540;
+      letter-spacing:-0.015em;
+      line-height:1.5;
+      color:var(--navy);
+      margin:0 0 18px;
+      font-variation-settings:"opsz" 36;
+      position:relative;
+      z-index:1;
+    }
+    .bc-quote figcaption{
+      font-size:13.5px;
+      color:var(--text-muted);
+      font-weight:500;
+    }
+    .bc-quote figcaption strong{color:var(--navy);font-weight:600;}
   </style>
 </head>
 <body>
@@ -536,6 +730,102 @@
     </div>
 
     <p class="pricing-note">Need to talk numbers? <a href="contact.html">Book a 20-minute call</a> and we'll walk through it together.</p>
+  </div>
+</section>
+
+<!-- BUSINESS CASE -->
+<section class="section" style="padding-top:0;" aria-labelledby="business-case-heading">
+  <div class="container">
+    <div class="section-header fade-up">
+      <div class="eyebrow-tag">The business case</div>
+      <h2 id="business-case-heading">Why it pays for itself.</h2>
+      <p>Five drivers MSPs use to justify the spend — and the numbers behind each.</p>
+    </div>
+
+    <div class="case-compare fade-up">
+
+      <!-- WITHOUT Composure -->
+      <div class="case-col case-col-without">
+        <div class="case-col-head">
+          <div class="case-col-eyebrow">Without Composure</div>
+          <div class="case-col-title">Reactive, manual, expensive</div>
+        </div>
+
+        <div class="case-row">
+          <div class="case-row-label">Comms staff</div>
+          <div class="case-row-value">Hire a junior coordinator at <strong>£30,000–£45,000/year</strong> &mdash; plus holiday cover, sickness and handover gaps.</div>
+        </div>
+        <div class="case-row">
+          <div class="case-row-label">Per incident</div>
+          <div class="case-row-value">2–4 hours of senior staff time per P0 / P1.<span class="case-sub">£240–£800 of senior time, every time.</span></div>
+        </div>
+        <div class="case-row">
+          <div class="case-row-label">Post-incident</div>
+          <div class="case-row-value"><strong>3–7 days</strong> to write a report &mdash; quality varies by author.<span class="case-sub">Key-person dependency.</span></div>
+        </div>
+        <div class="case-row">
+          <div class="case-row-label">Compliance</div>
+          <div class="case-row-value">Bespoke process needed to evidence ISO 27001 incident communication requirements.</div>
+        </div>
+        <div class="case-row">
+          <div class="case-row-label">Risk</div>
+          <div class="case-row-value">One silent incident = <strong>£50,000–£200,000</strong> in lost contract value per client.</div>
+        </div>
+
+        <div class="case-foot">
+          <div class="case-foot-label">Year-one cost</div>
+          <div class="case-foot-value">£30,000+</div>
+          <div class="case-foot-sub">In staff alone &mdash; before per-incident time and retention risk.</div>
+        </div>
+      </div>
+
+      <!-- WITH Composure -->
+      <div class="case-col case-col-with">
+        <div class="case-col-head">
+          <div class="case-col-eyebrow">With Composure</div>
+          <div class="case-col-title">Calm, consistent, automated</div>
+        </div>
+
+        <div class="case-row">
+          <div class="case-row-label">Comms staff</div>
+          <div class="case-row-value">Full platform from <strong>£5,988/year</strong> &mdash; less than 20% of one coordinator salary, no rota gaps.</div>
+        </div>
+        <div class="case-row">
+          <div class="case-row-label">Per incident</div>
+          <div class="case-row-value">Minutes &mdash; AI-drafted, approved, sent.<span class="case-sub">Senior staff focus on the fix, not the comms.</span></div>
+        </div>
+        <div class="case-row">
+          <div class="case-row-label">Post-incident</div>
+          <div class="case-row-value"><strong>Under 24 hours</strong>, every time, consistent quality.<span class="case-sub">No key-person dependency.</span></div>
+        </div>
+        <div class="case-row">
+          <div class="case-row-label">Compliance</div>
+          <div class="case-row-value">Enforced approval workflow satisfies <strong>ISO 27001</strong> incident comms out of the box.</div>
+        </div>
+        <div class="case-row">
+          <div class="case-row-label">Risk</div>
+          <div class="case-row-value">Silence eliminated. Every client gets the update they need, when they need it.</div>
+        </div>
+
+        <div class="case-foot">
+          <div class="case-foot-label">Annual saving from year one</div>
+          <div class="case-foot-value">£24,000–£39,000</div>
+          <div class="case-foot-sub"><strong>Just on staffing.</strong> Add senior-time savings and one retained client and the gap widens fast.</div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="bc-quotes fade-up">
+      <figure class="bc-quote">
+        <blockquote>"We had a major outage last year. The fix took 4 hours. We lost the client not because of the outage — because we went silent for 2 hours."</blockquote>
+        <figcaption><strong>Service Delivery Director</strong>, UK MSP</figcaption>
+      </figure>
+      <figure class="bc-quote">
+        <blockquote>"My AM had no idea we had a P1 running until the client called him. That conversation nearly cost us the contract."</blockquote>
+        <figcaption><strong>MD</strong>, Regional IT Provider</figcaption>
+      </figure>
+    </div>
   </div>
 </section>
 
